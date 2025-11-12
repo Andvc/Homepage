@@ -89,53 +89,53 @@ class CatAnimation {
             }
         };
 
-        // 场景物品热区定义（基于800x600画布和ExampleRoom 2）
+        // 场景物品热区定义（基于1600x1200画布和ExampleRoom 2，2倍缩放）
         this.sceneHotspots = [
             {
                 name: '食碗',
-                x: 320, y: 480, width: 60, height: 50,
+                x: 640, y: 960, width: 120, height: 100,
                 action: 'Eating',
                 description: '点击食碗，猫咪会去吃饭'
             },
             {
                 name: '水碗',
-                x: 390, y: 460, width: 50, height: 45,
+                x: 780, y: 920, width: 100, height: 90,
                 action: 'Eating',
                 description: '点击水碗，猫咪会去喝水'
             },
             {
                 name: '猫窝',
-                x: 280, y: 280, width: 120, height: 80,
+                x: 560, y: 560, width: 240, height: 160,
                 action: 'Sleep',
                 description: '点击猫窝，猫咪会去睡觉'
             },
             {
                 name: '猫爬架',
-                x: 520, y: 280, width: 100, height: 120,
+                x: 1040, y: 560, width: 200, height: 240,
                 action: 'Excited',
                 description: '点击猫爬架，猫咪会兴奋地玩耍'
             },
             {
                 name: '玩具球',
-                x: 200, y: 380, width: 40, height: 40,
+                x: 400, y: 760, width: 80, height: 80,
                 action: 'Dance',
                 description: '点击玩具球，猫咪会玩球'
             },
             {
                 name: '架子',
-                x: 100, y: 280, width: 80, height: 100,
+                x: 200, y: 560, width: 160, height: 200,
                 action: 'LayDown',
                 description: '点击架子，猫咪会躺在上面'
             },
             {
                 name: '植物',
-                x: 170, y: 240, width: 50, height: 70,
+                x: 340, y: 480, width: 100, height: 140,
                 action: 'Surprised',
                 description: '点击植物，猫咪会感到好奇'
             },
             {
                 name: '猫抓板',
-                x: 450, y: 280, width: 50, height: 60,
+                x: 900, y: 560, width: 100, height: 120,
                 action: 'Waiting',
                 description: '点击猫抓板，猫咪会去抓挠'
             }
@@ -152,7 +152,7 @@ class CatAnimation {
         // 猫咪位置和缩放
         this.catX = this.canvas.width / 2;
         this.catY = this.canvas.height / 2;
-        this.scale = 4;
+        this.scale = 3;  // 从4缩小到3，相对场景更小
 
         // 状态管理
         this.stateTimer = null;
@@ -243,40 +243,42 @@ class CatAnimation {
             return;
         }
 
-        // 绘制热区（调试模式）
+        // 绘制热区（调试模式，2倍缩放）
         if (this.showHotspots) {
             this.sceneHotspots.forEach(hotspot => {
                 this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-                this.ctx.lineWidth = 2;
+                this.ctx.lineWidth = 4;
                 this.ctx.strokeRect(hotspot.x, hotspot.y, hotspot.width, hotspot.height);
 
                 this.ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
                 this.ctx.fillRect(hotspot.x, hotspot.y, hotspot.width, hotspot.height);
 
                 this.ctx.fillStyle = '#fff';
-                this.ctx.font = '12px Arial';
+                this.ctx.font = '24px Arial';
                 this.ctx.textAlign = 'center';
                 this.ctx.fillText(hotspot.name, hotspot.x + hotspot.width/2, hotspot.y + hotspot.height/2);
             });
         }
 
-        // 高亮悬停的热区
+        // 高亮悬停的热区（2倍缩放）
         if (this.hoveredHotspot && !this.isDragging) {
             const h = this.hoveredHotspot;
             this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.8)';
-            this.ctx.lineWidth = 3;
+            this.ctx.lineWidth = 6;
             this.ctx.strokeRect(h.x, h.y, h.width, h.height);
 
             this.ctx.fillStyle = 'rgba(255, 255, 0, 0.2)';
             this.ctx.fillRect(h.x, h.y, h.width, h.height);
 
-            // 显示提示文字
+            // 显示提示文字（放大2倍）
+            const textWidth = h.width + 120;
+            const textHeight = 44;
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            this.ctx.fillRect(h.x, h.y - 25, h.width + 60, 22);
+            this.ctx.fillRect(h.x, h.y - 50, textWidth, textHeight);
             this.ctx.fillStyle = '#fff';
-            this.ctx.font = '12px Arial';
+            this.ctx.font = '24px Arial';
             this.ctx.textAlign = 'center';
-            this.ctx.fillText(h.description, h.x + h.width/2 + 30, h.y - 10);
+            this.ctx.fillText(h.description, h.x + textWidth/2, h.y - 20);
         }
 
         // 绘制猫咪
@@ -305,17 +307,17 @@ class CatAnimation {
             dx, dy, drawWidth, drawHeight
         );
 
-        // 显示状态信息
+        // 显示状态信息（放大2倍适应新canvas）
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        this.ctx.fillRect(5, 5, 200, 85);
+        this.ctx.fillRect(10, 10, 400, 170);
 
         this.ctx.fillStyle = '#fff';
-        this.ctx.font = '14px Arial';
+        this.ctx.font = '28px Arial';
         this.ctx.textAlign = 'left';
-        this.ctx.fillText(`State: ${this.currentAnimation}`, 10, 20);
-        this.ctx.fillText(`Frame: ${this.currentFrame + 1}/${frameCount}`, 10, 40);
-        this.ctx.fillText(`Mode: ${this.manualControl ? 'Manual' : 'Auto'}`, 10, 60);
-        this.ctx.fillText(`Hotspot: ${this.hoveredHotspot?.name || 'None'}`, 10, 80);
+        this.ctx.fillText(`State: ${this.currentAnimation}`, 20, 45);
+        this.ctx.fillText(`Frame: ${this.currentFrame + 1}/${frameCount}`, 20, 85);
+        this.ctx.fillText(`Mode: ${this.manualControl ? 'Manual' : 'Auto'}`, 20, 125);
+        this.ctx.fillText(`Hotspot: ${this.hoveredHotspot?.name || 'None'}`, 20, 165);
 
         // 悬停在猫咪上的提示
         if (this.isHovering && !this.hoveredHotspot) {
