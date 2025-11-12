@@ -28,46 +28,46 @@ class CatAnimation {
         // 状态机配置
         this.states = {
             'Box1': {
-                onHover: 'Box2',           // 悬停时进入Box2
-                onDragStart: 'Excited',    // 开始拖动时兴奋
-                timeout: null              // 无自动转换
+                onHover: 'Box2',
+                onDragStart: 'Excited',
+                timeout: null
             },
             'Box2': {
-                onHoverLeave: 'Box1',      // 鼠标离开时回到Box1
-                onDragStart: 'Excited',    // 开始拖动时兴奋
+                onHoverLeave: 'Box1',
+                onDragStart: 'Excited',
                 timeout: null
             },
             'Excited': {
-                onDragEnd: 'Idle',         // 拖动结束进入待机
+                onDragEnd: 'Idle',
                 timeout: null
             },
             'Idle': {
-                onHover: 'Idle2',          // 悬停时换个待机姿势
-                onDragStart: 'Excited',    // 拖动时兴奋
-                onClick: 'Surprised',       // 点击时惊讶
-                timeout: { state: 'Sleepy', delay: 5000 }  // 5秒后困倦
+                onHover: 'Idle2',
+                onDragStart: 'Excited',
+                onClick: 'Surprised',
+                timeout: { state: 'Sleepy', delay: 5000 }
             },
             'Idle2': {
-                onHoverLeave: 'Idle',      // 离开后回到普通待机
+                onHoverLeave: 'Idle',
                 onDragStart: 'Excited',
                 onClick: 'Surprised',
                 timeout: { state: 'Sleepy', delay: 5000 }
             },
             'Sleepy': {
-                onDragStart: 'Surprised',  // 困倦时拖动会惊讶
+                onDragStart: 'Surprised',
                 onClick: 'Surprised',
-                timeout: { state: 'Sleep', delay: 3000 }  // 3秒后睡觉
+                timeout: { state: 'Sleep', delay: 1000 }  // 修改为1秒
             },
             'Sleep': {
-                onDragStart: 'Surprised',  // 睡觉时拖动会惊醒
-                onClick: 'Surprised',      // 睡觉时点击会惊醒
-                timeout: null              // 睡觉不会自动转换
+                onDragStart: 'Surprised',
+                onClick: 'Surprised',
+                timeout: null
             },
             'Surprised': {
-                timeout: { state: 'Idle', delay: 2000 }  // 2秒后回到待机
+                timeout: { state: 'Idle', delay: 2000 }
             },
             'Eating': {
-                timeout: { state: 'Idle', delay: 3000 }  // 吃完3秒后待机
+                timeout: { state: 'Idle', delay: 3000 }
             },
             'Dance': {
                 timeout: { state: 'Idle', delay: 2000 }
@@ -89,11 +89,64 @@ class CatAnimation {
             }
         };
 
-        this.currentAnimation = 'Box1';  // 初始状态：在箱子里
+        // 场景物品热区定义（基于800x600画布和ExampleRoom 2）
+        this.sceneHotspots = [
+            {
+                name: '食碗',
+                x: 320, y: 480, width: 60, height: 50,
+                action: 'Eating',
+                description: '点击食碗，猫咪会去吃饭'
+            },
+            {
+                name: '水碗',
+                x: 390, y: 460, width: 50, height: 45,
+                action: 'Eating',
+                description: '点击水碗，猫咪会去喝水'
+            },
+            {
+                name: '猫窝',
+                x: 280, y: 280, width: 120, height: 80,
+                action: 'Sleep',
+                description: '点击猫窝，猫咪会去睡觉'
+            },
+            {
+                name: '猫爬架',
+                x: 520, y: 280, width: 100, height: 120,
+                action: 'Excited',
+                description: '点击猫爬架，猫咪会兴奋地玩耍'
+            },
+            {
+                name: '玩具球',
+                x: 200, y: 380, width: 40, height: 40,
+                action: 'Dance',
+                description: '点击玩具球，猫咪会玩球'
+            },
+            {
+                name: '架子',
+                x: 100, y: 280, width: 80, height: 100,
+                action: 'LayDown',
+                description: '点击架子，猫咪会躺在上面'
+            },
+            {
+                name: '植物',
+                x: 170, y: 240, width: 50, height: 70,
+                action: 'Surprised',
+                description: '点击植物，猫咪会感到好奇'
+            },
+            {
+                name: '猫抓板',
+                x: 450, y: 280, width: 50, height: 60,
+                action: 'Waiting',
+                description: '点击猫抓板，猫咪会去抓挠'
+            }
+        ];
+
+        this.currentAnimation = 'Idle';  // 初始状态改为待机
         this.currentFrame = 0;
         this.frameDelay = 100;
         this.lastFrameTime = Date.now();
         this.images = {};
+        this.backgroundImage = null;
         this.isLoading = true;
 
         // 猫咪位置和缩放
@@ -102,15 +155,28 @@ class CatAnimation {
         this.scale = 4;
 
         // 状态管理
-        this.stateTimer = null;        // 状态转换定时器
-        this.isHovering = false;       // 是否悬停在猫咪上
-        this.isDragging = false;       // 是否正在拖动
-        this.manualControl = false;    // 手动控制模式（按钮触发）
+        this.stateTimer = null;
+        this.isHovering = false;
+        this.isDragging = false;
+        this.manualControl = false;
+        this.hoveredHotspot = null;  // 当前悬停的热区
+        this.showHotspots = false;   // 是否显示热区（调试用）
 
         this.preloadAnimations();
     }
 
     preloadAnimations() {
+        // 加载背景图
+        this.backgroundImage = new Image();
+        this.backgroundImage.onload = () => {
+            console.log('Background loaded');
+        };
+        this.backgroundImage.onerror = () => {
+            console.error('Failed to load background');
+        };
+        this.backgroundImage.src = 'public/CatPackPaid/CatPackPaid/ExampleRooms/ExampleRoom 2.png';
+
+        // 加载所有动画
         const animationKeys = Object.keys(this.animations);
         let loadedCount = 0;
 
@@ -138,7 +204,7 @@ class CatAnimation {
 
     startAnimation() {
         this.animate();
-        this.setupStateTimer();  // 设置状态定时器
+        this.setupStateTimer();
     }
 
     animate() {
@@ -160,17 +226,60 @@ class CatAnimation {
     }
 
     render() {
-        this.ctx.fillStyle = '#f0f0f0';
+        // 清空画布
+        this.ctx.fillStyle = '#87CEEB';  // 天空蓝背景
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // 绘制背景场景
+        if (this.backgroundImage && this.backgroundImage.complete) {
+            this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
+        }
 
         if (this.isLoading) {
             this.ctx.fillStyle = '#333';
             this.ctx.font = '24px Arial';
             this.ctx.textAlign = 'center';
-            this.ctx.fillText('Loading cat animations...', this.canvas.width / 2, this.canvas.height / 2);
+            this.ctx.fillText('Loading...', this.canvas.width / 2, this.canvas.height / 2);
             return;
         }
 
+        // 绘制热区（调试模式）
+        if (this.showHotspots) {
+            this.sceneHotspots.forEach(hotspot => {
+                this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(hotspot.x, hotspot.y, hotspot.width, hotspot.height);
+
+                this.ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+                this.ctx.fillRect(hotspot.x, hotspot.y, hotspot.width, hotspot.height);
+
+                this.ctx.fillStyle = '#fff';
+                this.ctx.font = '12px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(hotspot.name, hotspot.x + hotspot.width/2, hotspot.y + hotspot.height/2);
+            });
+        }
+
+        // 高亮悬停的热区
+        if (this.hoveredHotspot && !this.isDragging) {
+            const h = this.hoveredHotspot;
+            this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.8)';
+            this.ctx.lineWidth = 3;
+            this.ctx.strokeRect(h.x, h.y, h.width, h.height);
+
+            this.ctx.fillStyle = 'rgba(255, 255, 0, 0.2)';
+            this.ctx.fillRect(h.x, h.y, h.width, h.height);
+
+            // 显示提示文字
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(h.x, h.y - 25, h.width + 60, 22);
+            this.ctx.fillStyle = '#fff';
+            this.ctx.font = '12px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(h.description, h.x + h.width/2 + 30, h.y - 10);
+        }
+
+        // 绘制猫咪
         const img = this.images[this.currentAnimation];
         if (!img || !img.complete) {
             return;
@@ -197,15 +306,19 @@ class CatAnimation {
         );
 
         // 显示状态信息
-        this.ctx.fillStyle = '#666';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        this.ctx.fillRect(5, 5, 200, 85);
+
+        this.ctx.fillStyle = '#fff';
         this.ctx.font = '14px Arial';
         this.ctx.textAlign = 'left';
         this.ctx.fillText(`State: ${this.currentAnimation}`, 10, 20);
         this.ctx.fillText(`Frame: ${this.currentFrame + 1}/${frameCount}`, 10, 40);
         this.ctx.fillText(`Mode: ${this.manualControl ? 'Manual' : 'Auto'}`, 10, 60);
+        this.ctx.fillText(`Hotspot: ${this.hoveredHotspot?.name || 'None'}`, 10, 80);
 
-        // 悬停提示
-        if (this.isHovering) {
+        // 悬停在猫咪上的提示
+        if (this.isHovering && !this.hoveredHotspot) {
             this.ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
             const bounds = this.getCatBounds();
             if (bounds) {
@@ -214,7 +327,6 @@ class CatAnimation {
         }
     }
 
-    // 状态转换方法
     changeState(newState, reason = 'manual') {
         if (!this.animations[newState]) {
             console.warn(`State "${newState}" not found`);
@@ -226,25 +338,21 @@ class CatAnimation {
         this.currentAnimation = newState;
         this.currentFrame = 0;
 
-        // 更新UI显示
         const animationLabel = document.getElementById('currentAnimation');
         if (animationLabel) {
             animationLabel.textContent = newState;
         }
 
-        // 清除旧的定时器
         if (this.stateTimer) {
             clearTimeout(this.stateTimer);
             this.stateTimer = null;
         }
 
-        // 设置新的状态定时器
         if (!this.manualControl) {
             this.setupStateTimer();
         }
     }
 
-    // 设置状态转换定时器
     setupStateTimer() {
         const currentState = this.states[this.currentAnimation];
         if (currentState && currentState.timeout) {
@@ -256,7 +364,6 @@ class CatAnimation {
         }
     }
 
-    // 处理悬停事件
     handleHover(isHovering) {
         if (this.manualControl || this.isDragging) return;
 
@@ -272,7 +379,6 @@ class CatAnimation {
         this.isHovering = isHovering;
     }
 
-    // 处理拖动开始
     handleDragStart() {
         if (this.manualControl) return;
 
@@ -283,7 +389,6 @@ class CatAnimation {
         }
     }
 
-    // 处理拖动结束
     handleDragEnd() {
         if (this.manualControl) return;
 
@@ -294,7 +399,6 @@ class CatAnimation {
         }
     }
 
-    // 处理点击事件
     handleClick() {
         if (this.manualControl || this.isDragging) return;
 
@@ -304,19 +408,44 @@ class CatAnimation {
         }
     }
 
-    // 手动控制模式（从按钮触发）
+    // 检查点击的热区
+    checkHotspotClick(x, y) {
+        for (const hotspot of this.sceneHotspots) {
+            if (x >= hotspot.x && x <= hotspot.x + hotspot.width &&
+                y >= hotspot.y && y <= hotspot.y + hotspot.height) {
+                console.log(`Hotspot clicked: ${hotspot.name} → ${hotspot.action}`);
+                this.changeState(hotspot.action, `hotspot-${hotspot.name}`);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 检查鼠标悬停的热区
+    checkHotspotHover(x, y) {
+        for (const hotspot of this.sceneHotspots) {
+            if (x >= hotspot.x && x <= hotspot.x + hotspot.width &&
+                y >= hotspot.y && y <= hotspot.y + hotspot.height) {
+                return hotspot;
+            }
+        }
+        return null;
+    }
+
     changeAnimation(animationName) {
         this.manualControl = true;
         this.changeState(animationName, 'manual-button');
 
-        // 5秒后退出手动模式
         setTimeout(() => {
             this.manualControl = false;
             this.setupStateTimer();
         }, 5000);
     }
 
-    // 获取猫咪的边界框
+    toggleHotspots() {
+        this.showHotspots = !this.showHotspots;
+    }
+
     getCatBounds() {
         const img = this.images[this.currentAnimation];
         if (!img || !img.complete) return null;
@@ -335,7 +464,6 @@ class CatAnimation {
         };
     }
 
-    // 检查点是否在猫咪范围内
     isPointInCat(x, y) {
         const bounds = this.getCatBounds();
         if (!bounds) return false;
@@ -354,25 +482,32 @@ window.addEventListener('load', () => {
     let dragOffsetX = 0;
     let dragOffsetY = 0;
 
-    // 鼠标移动事件（用于悬停检测和拖动）
+    // 鼠标移动事件
     canvas.addEventListener('mousemove', (e) => {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
         if (catAnimation.isDragging) {
-            // 拖动猫咪
             catAnimation.catX = x - dragOffsetX;
             catAnimation.catY = y - dragOffsetY;
         } else {
-            // 悬停检测
-            const isHovering = catAnimation.isPointInCat(x, y);
-            catAnimation.handleHover(isHovering);
-            canvas.style.cursor = isHovering ? 'pointer' : 'default';
+            // 检查热区悬停
+            const hotspot = catAnimation.checkHotspotHover(x, y);
+            catAnimation.hoveredHotspot = hotspot;
+
+            // 如果不在热区上，检查是否在猫咪上
+            if (!hotspot) {
+                const isHovering = catAnimation.isPointInCat(x, y);
+                catAnimation.handleHover(isHovering);
+                canvas.style.cursor = isHovering ? 'pointer' : 'default';
+            } else {
+                canvas.style.cursor = 'pointer';
+            }
         }
     });
 
-    // 鼠标按下（开始拖动）
+    // 鼠标按下
     canvas.addEventListener('mousedown', (e) => {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -386,7 +521,7 @@ window.addEventListener('load', () => {
         }
     });
 
-    // 鼠标释放（结束拖动）
+    // 鼠标释放
     canvas.addEventListener('mouseup', (e) => {
         if (catAnimation.isDragging) {
             catAnimation.handleDragEnd();
@@ -400,10 +535,11 @@ window.addEventListener('load', () => {
             catAnimation.handleDragEnd();
         }
         catAnimation.handleHover(false);
+        catAnimation.hoveredHotspot = null;
         canvas.style.cursor = 'default';
     });
 
-    // 点击事件（不拖动的点击）
+    // 点击事件
     let mouseDownPos = null;
     canvas.addEventListener('mousedown', (e) => {
         const rect = canvas.getBoundingClientRect();
@@ -415,12 +551,18 @@ window.addEventListener('load', () => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // 如果鼠标没有移动太多，算作点击
+        // 检查是否是点击（而非拖动）
         if (mouseDownPos &&
             Math.abs(x - mouseDownPos.x) < 5 &&
-            Math.abs(y - mouseDownPos.y) < 5 &&
-            catAnimation.isPointInCat(x, y)) {
-            catAnimation.handleClick();
+            Math.abs(y - mouseDownPos.y) < 5) {
+
+            // 优先检查热区点击
+            const hotspotClicked = catAnimation.checkHotspotClick(x, y);
+
+            // 如果没有点击热区，检查是否点击了猫咪
+            if (!hotspotClicked && catAnimation.isPointInCat(x, y)) {
+                catAnimation.handleClick();
+            }
         }
     });
 });
