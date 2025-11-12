@@ -12,22 +12,34 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             font-family: 'Arial', sans-serif;
-            overflow: hidden;
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        /* 固定的猫咪场景容器 */
+        .cat-scene-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 1;
+            pointer-events: none; /* 默认不拦截点击，让下方内容可点击 */
         }
 
         .container {
+            position: relative;
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
             padding: 40px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            margin: 20px auto;
+            max-width: 1800px;
+            pointer-events: auto; /* 容器内可以点击 */
         }
 
         h1 {
@@ -117,54 +129,204 @@
             margin-top: 10px;
             font-family: monospace;
         }
+
+        /* 滚动提示 */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            pointer-events: none;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator p {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-left: 3px solid white;
+            border-bottom: 3px solid white;
+            transform: rotate(-45deg);
+            margin: 0 auto;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            position: relative;
+            z-index: 2;
+            margin-top: 100vh; /* 从第二屏开始 */
+            background: #1a1a2e;
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 80px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section h2 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-content p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* 不同section的背景色 */
+        .section:nth-child(odd) {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .section:nth-child(even) {
+            background: linear-gradient(180deg, #16213e 0%, #0f3460 100%);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🐱 My Cat Homepage</h1>
-        <canvas id="catCanvas" width="1600" height="1200"></canvas>
-        <div class="controls">
-            <button class="btn" onclick="catAnimation.toggleHotspots()" style="background: rgba(255, 200, 100, 0.9);">🎯 显示/隐藏热区</button>
-            <button class="btn" onclick="catAnimation.changeAnimation('Idle')">待机</button>
-            <button class="btn" onclick="catAnimation.changeAnimation('Eating')">吃饭</button>
-            <button class="btn" onclick="catAnimation.changeAnimation('Dance')">跳舞</button>
-            <button class="btn" onclick="catAnimation.changeAnimation('Sleep')">睡觉</button>
-            <button class="btn" onclick="catAnimation.changeAnimation('Excited')">兴奋</button>
-            <button class="btn" onclick="catAnimation.changeAnimation('Surprised')">惊讶</button>
-        </div>
-        <div class="info">
-            当前状态: <span id="currentAnimation">Idle</span>
-        </div>
-
-        <div class="instructions">
-            <h3>🎮 互动指南</h3>
-            <ul>
-                <li><strong>场景物品交互</strong>：点击场景中的物品，猫咪会做出相应动作
-                    <ul style="margin-top: 5px;">
-                        <li>🍽️ 食碗/水碗 → 吃饭</li>
-                        <li>🛏️ 猫窝 → 睡觉</li>
-                        <li>🎢 猫爬架 → 兴奋玩耍</li>
-                        <li>⚽ 玩具球 → 玩球跳舞</li>
-                        <li>📚 架子 → 躺下</li>
-                        <li>🌿 植物 → 好奇惊讶</li>
-                    </ul>
-                </li>
-                <li><strong>拖拽猫咪</strong>：按住鼠标拖动猫咪到任意位置，猫咪会兴奋</li>
-                <li><strong>点击猫咪</strong>：在不同状态下点击会有不同反应</li>
-                <li><strong>自动行为</strong>：猫咪会根据状态自动转换动作</li>
-            </ul>
-
-            <h3>🔄 自动状态流程</h3>
-            <div class="state-flow">
-                待机 → (5秒) → 困倦 → (1秒) → 睡觉<br>
-                睡觉 → (点击/拖动) → 惊讶 → (2秒) → 待机<br>
-                吃饭/玩耍 → (完成) → 待机
+    <!-- 固定的猫咪场景 -->
+    <div class="cat-scene-fixed">
+        <div class="container">
+            <h1>🐱 My Cat Homepage</h1>
+            <canvas id="catCanvas" width="1600" height="1200"></canvas>
+            <div class="controls">
+                <button class="btn" onclick="catAnimation.toggleHotspots()" style="background: rgba(255, 200, 100, 0.9);">🎯 显示/隐藏热区</button>
+                <button class="btn" onclick="catAnimation.changeAnimation('Idle')">待机</button>
+                <button class="btn" onclick="catAnimation.changeAnimation('Eating')">吃饭</button>
+                <button class="btn" onclick="catAnimation.changeAnimation('Dance')">跳舞</button>
+                <button class="btn" onclick="catAnimation.changeAnimation('Sleep')">睡觉</button>
+                <button class="btn" onclick="catAnimation.changeAnimation('Excited')">兴奋</button>
+                <button class="btn" onclick="catAnimation.changeAnimation('Surprised')">惊讶</button>
+            </div>
+            <div class="info">
+                当前状态: <span id="currentAnimation">Idle</span>
             </div>
 
-            <p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">
-                💡 提示：点击"显示/隐藏热区"按钮可以看到所有可交互区域
-            </p>
+            <div class="instructions">
+                <h3>🎮 互动指南</h3>
+                <ul>
+                    <li><strong>场景物品交互</strong>：点击场景中的物品，猫咪会做出相应动作
+                        <ul style="margin-top: 5px;">
+                            <li>🍽️ 食碗/水碗 → 吃饭</li>
+                            <li>🛏️ 猫窝 → 睡觉</li>
+                            <li>🎢 猫爬架 → 兴奋玩耍</li>
+                            <li>⚽ 玩具球 → 玩球跳舞</li>
+                            <li>📚 架子 → 躺下</li>
+                            <li>🌿 植物 → 好奇惊讶</li>
+                        </ul>
+                    </li>
+                    <li><strong>拖拽猫咪</strong>：按住鼠标拖动猫咪到任意位置，猫咪会兴奋</li>
+                    <li><strong>点击猫咪</strong>：在不同状态下点击会有不同反应</li>
+                    <li><strong>自动行为</strong>：猫咪会根据状态自动转换动作</li>
+                </ul>
+
+                <h3>🔄 自动状态流程</h3>
+                <div class="state-flow">
+                    待机 → (5秒) → 困倦 → (1秒) → 睡觉<br>
+                    睡觉 → (点击/拖动) → 惊讶 → (2秒) → 待机<br>
+                    吃饭/玩耍 → (完成) → 待机
+                </div>
+
+                <p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">
+                    💡 提示：点击"显示/隐藏热区"按钮可以看到所有可交互区域
+                </p>
+            </div>
         </div>
+
+        <!-- 滚动提示 -->
+        <div class="scroll-indicator">
+            <p>向下滚动查看更多</p>
+            <div class="scroll-arrow"></div>
+        </div>
+    </div>
+
+    <!-- 可滚动的主内容区域 -->
+    <div class="main-content">
+        <section class="section" id="about">
+            <h2>关于我</h2>
+            <div class="section-content">
+                <p>
+                    这里是关于我的介绍内容...
+                </p>
+                <p style="margin-top: 20px;">
+                    您可以在这个区域添加您的个人介绍、技能、经历等信息。
+                </p>
+            </div>
+        </section>
+
+        <section class="section" id="projects">
+            <h2>我的作品</h2>
+            <div class="section-content">
+                <p>
+                    这里展示您的项目作品集...
+                </p>
+                <p style="margin-top: 20px;">
+                    可以添加项目卡片、项目描述、技术栈、项目链接等内容。
+                </p>
+            </div>
+        </section>
+
+        <section class="section" id="skills">
+            <h2>技能专长</h2>
+            <div class="section-content">
+                <p>
+                    这里展示您的专业技能...
+                </p>
+                <p style="margin-top: 20px;">
+                    可以使用技能图表、进度条、标签云等形式展示您的技能。
+                </p>
+            </div>
+        </section>
+
+        <section class="section" id="contact">
+            <h2>联系方式</h2>
+            <div class="section-content">
+                <p>
+                    这里是您的联系方式...
+                </p>
+                <p style="margin-top: 20px;">
+                    可以添加邮箱、社交媒体链接、GitHub、LinkedIn等联系方式。
+                </p>
+            </div>
+        </section>
     </div>
 
     <script src="catAnimation.js"></script>
