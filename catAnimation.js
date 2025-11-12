@@ -3,23 +3,26 @@ class CatAnimation {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
 
-        // 动画配置：每个动画的帧数
+        // 动画配置：每个动画的帧数（已根据实际sprite sheet修正）
         this.animations = {
             'Idle': { frames: 10, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Idle.png' },
-            'Idle2': { frames: 13, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Idle2.png' },
-            'Eating': { frames: 14, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Eating.png' },
+            'Idle2': { frames: 10, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Idle2.png' },
+            'Eating': { frames: 15, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Eating.png' },
             'Dance': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Dance.png' },
             'Sleep': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Sleep.png' },
-            'Sleepy': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Sleepy.png' },
+            'Sleepy': { frames: 8, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Sleepy.png' },
             'Excited': { frames: 12, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Excited.png' },
-            'Surprised': { frames: 13, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Surprised.png' },
+            'Surprised': { frames: 12, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Surprised.png' },
             'Box1': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Box1.png' },
-            'Box2': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Box2.png' },
+            'Box2': { frames: 12, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Box2.png' },
             'Box3': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Box3.png' },
-            'Cry': { frames: 8, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Cry.png' },
-            'Sad': { frames: 8, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Sad.png' },
-            'Waiting': { frames: 13, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Waiting.png' },
-            'LayDown': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/LayDown.png' }
+            'Cry': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Cry.png' },
+            'Sad': { frames: 9, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Sad.png' },
+            'Waiting': { frames: 6, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/Waiting.png' },
+            'LayDown': { frames: 12, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/LayDown.png' },
+            'CatSick1': { frames: 5, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/catsick1.png' },
+            'CatSick2': { frames: 4, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/catsick2.png' },
+            'DeadCat': { frames: 1, path: 'public/CatPackPaid/CatPackPaid/Sprites/Classical/Individual/DeadCat.png' }
         };
 
         this.currentAnimation = 'Idle';
