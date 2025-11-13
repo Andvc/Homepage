@@ -636,8 +636,11 @@ window.addEventListener('load', () => {
     // 鼠标移动事件
     canvas.addEventListener('mousemove', (e) => {
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        // 坐标转换：CSS显示尺寸 → Canvas内部坐标系
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
 
         if (catAnimation.isDragging) {
             catAnimation.catX = x - dragOffsetX;
@@ -673,8 +676,11 @@ window.addEventListener('load', () => {
     // 鼠标按下
     canvas.addEventListener('mousedown', (e) => {
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        // 坐标转换：CSS显示尺寸 → Canvas内部坐标系
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
 
         if (catAnimation.isPointInCat(x, y)) {
             dragOffsetX = x - catAnimation.catX;
@@ -707,13 +713,22 @@ window.addEventListener('load', () => {
     let mouseDownPos = null;
     canvas.addEventListener('mousedown', (e) => {
         const rect = canvas.getBoundingClientRect();
-        mouseDownPos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        // 坐标转换：CSS显示尺寸 → Canvas内部坐标系
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        mouseDownPos = {
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY
+        };
     });
 
     canvas.addEventListener('click', (e) => {
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        // 坐标转换：CSS显示尺寸 → Canvas内部坐标系
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
 
         // 检查是否是点击（而非拖动）
         if (mouseDownPos &&
