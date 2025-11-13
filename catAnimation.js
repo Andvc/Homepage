@@ -158,7 +158,7 @@ class CatAnimation {
                 name: '玩具球',
                 x: 480, y: 780, width: 60, height: 60,
                 action: 'Dance',
-                description: '拖动到玩具球，猫咪会跳舞。。。什么？',
+                description: '松开鼠标跳舞？？',
                 snapPoint: { x: 540, y: 800 }  // 吸附点：球旁边
             },
             {
