@@ -95,63 +95,63 @@ class CatAnimation {
             }
         };
 
-        // 场景物品热区定义（基于1600x1200画布和ExampleRoom 2，2倍缩放）
+        // 场景物品热区定义（基于1600x1200画布和ExampleRoom 2，2倍缩放，向右调整）
         this.sceneHotspots = [
             {
                 name: '食碗',
-                x: 640, y: 960, width: 120, height: 100,
+                x: 740, y: 960, width: 120, height: 100,
                 action: 'Eating',
                 description: '拖动到食碗，猫咪会去吃饭',
-                snapPoint: { x: 700, y: 950 }  // 吸附点：食碗旁边
+                snapPoint: { x: 800, y: 950 }  // 吸附点：食碗旁边
             },
             {
                 name: '水碗',
-                x: 780, y: 920, width: 100, height: 90,
+                x: 880, y: 920, width: 100, height: 90,
                 action: 'CatSick1',
                 description: '拖动到水碗，猫咪会喝水（生病）',
-                snapPoint: { x: 830, y: 920 }  // 吸附点：水碗旁边
+                snapPoint: { x: 930, y: 920 }  // 吸附点：水碗旁边
             },
             {
                 name: '猫窝',
-                x: 560, y: 560, width: 240, height: 160,
+                x: 660, y: 560, width: 240, height: 160,
                 action: 'Sleep',
                 description: '拖动到猫窝，猫咪会去睡觉',
-                snapPoint: { x: 680, y: 620 }  // 吸附点：猫窝中心
+                snapPoint: { x: 780, y: 620 }  // 吸附点：猫窝中心
             },
             {
                 name: '猫爬架',
-                x: 1040, y: 560, width: 200, height: 240,
+                x: 1140, y: 560, width: 200, height: 240,
                 action: 'Dance',
                 description: '拖动到猫爬架，猫咪会跳舞',
-                snapPoint: { x: 1140, y: 650 }  // 吸附点：猫爬架中层
+                snapPoint: { x: 1240, y: 650 }  // 吸附点：猫爬架中层
             },
             {
                 name: '玩具球',
-                x: 400, y: 760, width: 80, height: 80,
+                x: 500, y: 760, width: 80, height: 80,
                 action: 'Dance',
                 description: '点击玩具球，猫咪会玩球',
-                snapPoint: { x: 440, y: 800 }  // 吸附点：球旁边
+                snapPoint: { x: 540, y: 800 }  // 吸附点：球旁边
             },
             {
                 name: '架子',
-                x: 200, y: 560, width: 160, height: 200,
+                x: 300, y: 560, width: 160, height: 200,
                 action: 'LayDown',
                 description: '拖动到架子，猫咪会躺在上面',
-                snapPoint: { x: 280, y: 620 }  // 吸附点：架子上层
+                snapPoint: { x: 380, y: 620 }  // 吸附点：架子上层
             },
             {
                 name: '植物',
-                x: 340, y: 480, width: 100, height: 140,
+                x: 440, y: 480, width: 100, height: 140,
                 action: 'Surprised',
                 description: '点击植物，猫咪会感到好奇'
                 // 无snapPoint，不支持吸附
             },
             {
                 name: '猫抓板',
-                x: 900, y: 560, width: 100, height: 120,
+                x: 1000, y: 560, width: 100, height: 120,
                 action: 'Excited',
                 description: '拖动到猫抓板，猫咪会兴奋抓挠',
-                snapPoint: { x: 950, y: 620 }  // 吸附点：猫抓板前
+                snapPoint: { x: 1050, y: 620 }  // 吸附点：猫抓板前
             }
         ];
 
