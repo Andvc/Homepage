@@ -95,49 +95,57 @@ class CatAnimation {
                 name: '食碗',
                 x: 640, y: 960, width: 120, height: 100,
                 action: 'Eating',
-                description: '点击食碗，猫咪会去吃饭'
+                description: '点击食碗，猫咪会去吃饭',
+                snapPoint: { x: 700, y: 950 }  // 吸附点：食碗旁边
             },
             {
                 name: '水碗',
                 x: 780, y: 920, width: 100, height: 90,
                 action: 'Eating',
-                description: '点击水碗，猫咪会去喝水'
+                description: '点击水碗，猫咪会去喝水',
+                snapPoint: { x: 830, y: 920 }  // 吸附点：水碗旁边
             },
             {
                 name: '猫窝',
                 x: 560, y: 560, width: 240, height: 160,
                 action: 'Sleep',
-                description: '点击猫窝，猫咪会去睡觉'
+                description: '点击猫窝，猫咪会去睡觉',
+                snapPoint: { x: 680, y: 620 }  // 吸附点：猫窝中心
             },
             {
                 name: '猫爬架',
                 x: 1040, y: 560, width: 200, height: 240,
                 action: 'Excited',
-                description: '点击猫爬架，猫咪会兴奋地玩耍'
+                description: '点击猫爬架，猫咪会兴奋地玩耍',
+                snapPoint: { x: 1140, y: 650 }  // 吸附点：猫爬架中层
             },
             {
                 name: '玩具球',
                 x: 400, y: 760, width: 80, height: 80,
                 action: 'Dance',
-                description: '点击玩具球，猫咪会玩球'
+                description: '点击玩具球，猫咪会玩球',
+                snapPoint: { x: 440, y: 800 }  // 吸附点：球旁边
             },
             {
                 name: '架子',
                 x: 200, y: 560, width: 160, height: 200,
                 action: 'LayDown',
-                description: '点击架子，猫咪会躺在上面'
+                description: '点击架子，猫咪会躺在上面',
+                snapPoint: { x: 280, y: 620 }  // 吸附点：架子上层
             },
             {
                 name: '植物',
                 x: 340, y: 480, width: 100, height: 140,
                 action: 'Surprised',
-                description: '点击植物，猫咪会感到好奇'
+                description: '点击植物，猫咪会感到好奇',
+                snapPoint: { x: 390, y: 560 }  // 吸附点：植物旁边
             },
             {
                 name: '猫抓板',
                 x: 900, y: 560, width: 100, height: 120,
                 action: 'Waiting',
-                description: '点击猫抓板，猫咪会去抓挠'
+                description: '点击猫抓板，猫咪会去抓挠',
+                snapPoint: { x: 950, y: 620 }  // 吸附点：猫抓板前
             }
         ];
 
@@ -161,6 +169,7 @@ class CatAnimation {
         this.manualControl = false;
         this.hoveredHotspot = null;  // 当前悬停的热区
         this.showHotspots = false;   // 是否显示热区（调试用）
+        this.activeSnapZone = null;  // 当前拖动到的吸附区域
 
         this.preloadAnimations();
     }
@@ -281,6 +290,52 @@ class CatAnimation {
             this.ctx.fillText(h.description, h.x + textWidth/2, h.y - 20);
         }
 
+        // 绘制吸附虚影（如果正在拖动且在吸附区域内）
+        if (this.isDragging && this.activeSnapZone) {
+            const snapImg = this.images[this.activeSnapZone.action];
+            if (snapImg && snapImg.complete) {
+                const snapFrameCount = this.animations[this.activeSnapZone.action].frames;
+                const snapFrameWidth = snapImg.width / snapFrameCount;
+                const snapFrameHeight = snapImg.height;
+
+                // 使用第一帧作为虚影
+                const snapSx = 0;
+                const snapSy = 0;
+
+                const snapDrawWidth = snapFrameWidth * this.scale;
+                const snapDrawHeight = snapFrameHeight * this.scale;
+                const snapDx = this.activeSnapZone.snapPoint.x - snapDrawWidth / 2;
+                const snapDy = this.activeSnapZone.snapPoint.y - snapDrawHeight / 2;
+
+                // 绘制半透明虚影
+                this.ctx.globalAlpha = 0.4;
+                this.ctx.imageSmoothingEnabled = false;
+
+                this.ctx.drawImage(
+                    snapImg,
+                    snapSx, snapSy, snapFrameWidth, snapFrameHeight,
+                    snapDx, snapDy, snapDrawWidth, snapDrawHeight
+                );
+
+                // 恢复透明度
+                this.ctx.globalAlpha = 1.0;
+
+                // 绘制吸附点标记
+                this.ctx.fillStyle = 'rgba(255, 255, 0, 0.6)';
+                this.ctx.beginPath();
+                this.ctx.arc(this.activeSnapZone.snapPoint.x, this.activeSnapZone.snapPoint.y, 15, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // 绘制提示文字
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                this.ctx.fillRect(this.activeSnapZone.snapPoint.x - 100, this.activeSnapZone.snapPoint.y - 60, 200, 40);
+                this.ctx.fillStyle = '#fff';
+                this.ctx.font = '20px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(`松开鼠标进入${this.activeSnapZone.name}`, this.activeSnapZone.snapPoint.x, this.activeSnapZone.snapPoint.y - 35);
+            }
+        }
+
         // 绘制猫咪
         const img = this.images[this.currentAnimation];
         if (!img || !img.complete) {
@@ -395,9 +450,26 @@ class CatAnimation {
         if (this.manualControl) return;
 
         this.isDragging = false;
-        const currentState = this.states[this.currentAnimation];
-        if (currentState && currentState.onDragEnd) {
-            this.changeState(currentState.onDragEnd, 'drag-end');
+
+        // 如果在吸附区域，执行吸附
+        if (this.activeSnapZone) {
+            console.log(`Snapping to ${this.activeSnapZone.name}`);
+
+            // 移动猫咪到吸附点
+            this.catX = this.activeSnapZone.snapPoint.x;
+            this.catY = this.activeSnapZone.snapPoint.y;
+
+            // 执行对应动作
+            this.changeState(this.activeSnapZone.action, `snap-${this.activeSnapZone.name}`);
+
+            // 清除吸附区域
+            this.activeSnapZone = null;
+        } else {
+            // 普通拖动结束
+            const currentState = this.states[this.currentAnimation];
+            if (currentState && currentState.onDragEnd) {
+                this.changeState(currentState.onDragEnd, 'drag-end');
+            }
         }
     }
 
@@ -493,6 +565,17 @@ window.addEventListener('load', () => {
         if (catAnimation.isDragging) {
             catAnimation.catX = x - dragOffsetX;
             catAnimation.catY = y - dragOffsetY;
+
+            // 检查是否在吸附区域内
+            const snapZone = catAnimation.checkHotspotHover(x, y);
+            catAnimation.activeSnapZone = snapZone;
+
+            // 更新鼠标样式
+            if (snapZone) {
+                canvas.style.cursor = 'copy';  // 表示可以放置
+            } else {
+                canvas.style.cursor = 'grabbing';
+            }
         } else {
             // 检查热区悬停
             const hotspot = catAnimation.checkHotspotHover(x, y);
@@ -538,6 +621,7 @@ window.addEventListener('load', () => {
         }
         catAnimation.handleHover(false);
         catAnimation.hoveredHotspot = null;
+        catAnimation.activeSnapZone = null;  // 清除吸附区域
         canvas.style.cursor = 'default';
     });
 
