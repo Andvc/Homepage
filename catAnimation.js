@@ -136,7 +136,7 @@ class CatAnimation {
                 name: '水碗',
                 x: 860, y: 900, width: 150, height: 90,
                 action: 'CatSick1',
-                description: '拖动到水碗，猫咪会喝水（生病）',
+                description: '拖动到水碗，猫咪会。。。欸？',
                 snapPoint: { x: 930, y: 920 }  // 吸附点：水碗旁边
             },
             {
@@ -150,21 +150,21 @@ class CatAnimation {
                 name: '猫爬架',
                 x: 1220, y: 605, width: 200, height: 255,
                 action: 'Dance',
-                description: '拖动到猫爬架，猫咪会跳舞',
+                description: '拖动到猫爬架，猫咪会跳舞。。。什么？',
                 snapPoint: { x: 1310, y: 610 }  // 吸附点：猫爬架中层
             },
             {
                 name: '玩具球',
                 x: 480, y: 780, width: 60, height: 60,
                 action: 'Dance',
-                description: '点击玩具球，猫咪会玩球',
+                description: '拖动到玩具球，猫咪会跳舞。。。什么？',
                 snapPoint: { x: 540, y: 800 }  // 吸附点：球旁边
             },
             {
                 name: '架子',
                 x: 140, y: 580, width: 270, height: 250,
                 action: 'LayDown',
-                description: '拖动到架子，猫咪会躺在上面',
+                description: '拖动到架子，猫咪会摸鱼',
                 snapPoint: { x: 275, y: 595 }  // 吸附点：架子上层
             },
             {
