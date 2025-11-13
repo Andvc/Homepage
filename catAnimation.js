@@ -28,49 +28,49 @@ class CatAnimation {
         // 状态机配置
         this.states = {
             'Box1': {
-                onHover: 'Box2',
-                onDragStart: 'Excited',
-                timeout: null
+                onHover: 'Box2',           // 悬停时进入Box2
+                onDragStart: 'Excited',    // 开始拖动时兴奋
+                timeout: null              // 无自动转换
             },
             'Box2': {
-                onHoverLeave: 'Box1',
-                onDragStart: 'Excited',
+                onHoverLeave: 'Box1',      // 鼠标离开时回到Box1
+                onDragStart: 'Excited',    // 开始拖动时兴奋
                 timeout: null
             },
             'Excited': {
-                onDragEnd: 'Idle',
-                timeout: null
+                onDragEnd: 'Idle',         // 拖动结束进入待机
+                timeout: { state: 'Sleepy', delay: 3000 }  // 3秒后困倦
             },
             'Idle': {
-                onHover: 'Idle2',
-                onDragStart: 'Excited',
-                onClick: 'Surprised',
-                timeout: { state: 'Sleepy', delay: 5000 }
+                onHover: 'Idle2',          // 悬停时换个待机姿势
+                onDragStart: 'Excited',    // 拖动时兴奋
+                onClick: 'Surprised',       // 点击时惊讶
+                timeout: { state: 'Sleepy', delay: 5000 }  // 5秒后困倦
             },
             'Idle2': {
-                onHoverLeave: 'Idle',
+                onHoverLeave: 'Idle',      // 离开后回到普通待机
                 onDragStart: 'Excited',
                 onClick: 'Surprised',
                 timeout: { state: 'Sleepy', delay: 5000 }
             },
             'Sleepy': {
-                onDragStart: 'Surprised',
+                onDragStart: 'Surprised',  // 困倦时拖动会惊讶
                 onClick: 'Surprised',
-                timeout: { state: 'Sleep', delay: 1000 }  // 修改为1秒
+                timeout: { state: 'Sleep', delay: 1000 }  // 1秒后睡觉
             },
             'Sleep': {
-                onDragStart: 'Surprised',
-                onClick: 'Surprised',
-                timeout: null
+                onDragStart: 'Surprised',  // 睡觉时拖动会惊醒
+                onClick: 'Surprised',      // 睡觉时点击会惊醒
+                timeout: null              // 睡觉不会自动转换
             },
             'Surprised': {
-                timeout: { state: 'Idle', delay: 2000 }
+                timeout: { state: 'Idle', delay: 2000 }  // 2秒后回到待机
             },
             'Eating': {
-                timeout: { state: 'Idle', delay: 3000 }
+                timeout: { state: 'Sleepy', delay: 5000 }  // 5秒后困倦
             },
             'Dance': {
-                timeout: { state: 'Idle', delay: 2000 }
+                timeout: { state: 'Sleepy', delay: 3000 }  // 3秒后困倦
             },
             'Waiting': {
                 timeout: { state: 'Idle', delay: 2000 }
@@ -78,7 +78,7 @@ class CatAnimation {
             'LayDown': {
                 onDragStart: 'Surprised',
                 onClick: 'Excited',
-                timeout: { state: 'Sleepy', delay: 4000 }
+                timeout: null  // 持续状态，不会自动转换
             },
             'Cry': {
                 timeout: { state: 'Sad', delay: 2000 }
@@ -86,6 +86,12 @@ class CatAnimation {
             'Sad': {
                 onClick: 'Surprised',
                 timeout: { state: 'Idle', delay: 4000 }
+            },
+            'CatSick1': {
+                timeout: { state: 'Sleepy', delay: 5000 }  // 5秒后困倦
+            },
+            'CatSick2': {
+                timeout: { state: 'Sleepy', delay: 3000 }
             }
         };
 
@@ -95,28 +101,28 @@ class CatAnimation {
                 name: '食碗',
                 x: 640, y: 960, width: 120, height: 100,
                 action: 'Eating',
-                description: '点击食碗，猫咪会去吃饭',
+                description: '拖动到食碗，猫咪会去吃饭',
                 snapPoint: { x: 700, y: 950 }  // 吸附点：食碗旁边
             },
             {
                 name: '水碗',
                 x: 780, y: 920, width: 100, height: 90,
-                action: 'Eating',
-                description: '点击水碗，猫咪会去喝水',
+                action: 'CatSick1',
+                description: '拖动到水碗，猫咪会喝水（生病）',
                 snapPoint: { x: 830, y: 920 }  // 吸附点：水碗旁边
             },
             {
                 name: '猫窝',
                 x: 560, y: 560, width: 240, height: 160,
                 action: 'Sleep',
-                description: '点击猫窝，猫咪会去睡觉',
+                description: '拖动到猫窝，猫咪会去睡觉',
                 snapPoint: { x: 680, y: 620 }  // 吸附点：猫窝中心
             },
             {
                 name: '猫爬架',
                 x: 1040, y: 560, width: 200, height: 240,
-                action: 'Excited',
-                description: '点击猫爬架，猫咪会兴奋地玩耍',
+                action: 'Dance',
+                description: '拖动到猫爬架，猫咪会跳舞',
                 snapPoint: { x: 1140, y: 650 }  // 吸附点：猫爬架中层
             },
             {
@@ -130,26 +136,26 @@ class CatAnimation {
                 name: '架子',
                 x: 200, y: 560, width: 160, height: 200,
                 action: 'LayDown',
-                description: '点击架子，猫咪会躺在上面',
+                description: '拖动到架子，猫咪会躺在上面',
                 snapPoint: { x: 280, y: 620 }  // 吸附点：架子上层
             },
             {
                 name: '植物',
                 x: 340, y: 480, width: 100, height: 140,
                 action: 'Surprised',
-                description: '点击植物，猫咪会感到好奇',
-                snapPoint: { x: 390, y: 560 }  // 吸附点：植物旁边
+                description: '点击植物，猫咪会感到好奇'
+                // 无snapPoint，不支持吸附
             },
             {
                 name: '猫抓板',
                 x: 900, y: 560, width: 100, height: 120,
-                action: 'Waiting',
-                description: '点击猫抓板，猫咪会去抓挠',
+                action: 'Excited',
+                description: '拖动到猫抓板，猫咪会兴奋抓挠',
                 snapPoint: { x: 950, y: 620 }  // 吸附点：猫抓板前
             }
         ];
 
-        this.currentAnimation = 'Idle';  // 初始状态改为待机
+        this.currentAnimation = 'Box1';  // 初始状态：在箱子里
         this.currentFrame = 0;
         this.frameDelay = 100;
         this.lastFrameTime = Date.now();
@@ -157,7 +163,7 @@ class CatAnimation {
         this.backgroundImage = null;
         this.isLoading = true;
 
-        // 猫咪位置和缩放
+        // 猫咪位置和缩放（初始在场景中央）
         this.catX = this.canvas.width / 2;
         this.catY = this.canvas.height / 2;
         this.scale = 3;  // 从4缩小到3，相对场景更小
@@ -566,8 +572,9 @@ window.addEventListener('load', () => {
             catAnimation.catX = x - dragOffsetX;
             catAnimation.catY = y - dragOffsetY;
 
-            // 检查是否在吸附区域内
-            const snapZone = catAnimation.checkHotspotHover(x, y);
+            // 检查是否在吸附区域内（只检查有snapPoint的热区）
+            const hotspot = catAnimation.checkHotspotHover(x, y);
+            const snapZone = hotspot && hotspot.snapPoint ? hotspot : null;
             catAnimation.activeSnapZone = snapZone;
 
             // 更新鼠标样式
