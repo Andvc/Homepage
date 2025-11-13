@@ -99,18 +99,37 @@
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             max-width: 1400px;
+            overflow: hidden;
+            max-height: 700px;
+        }
+
+        /* Canvas包装器 - 裁剪上下空余 */
+        .canvas-wrapper {
+            position: relative;
+            height: 700px;
+            overflow: hidden;
+        }
+
+        .canvas-wrapper canvas {
+            position: relative;
+            top: -80px;
         }
 
         /* 向下滚动提示 */
         .scroll-hint {
             position: absolute;
             bottom: 30px;
-            font-size: 48px;
-            color: rgba(255, 255, 255, 0.8);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            width: 60px;
+            height: 60px;
             animation: floatUpDown 2s ease-in-out infinite;
             cursor: pointer;
             z-index: 15;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .scroll-hint img {
+            width: 100%;
+            height: 100%;
         }
 
         .scroll-hint-left {
@@ -481,12 +500,18 @@
     <!-- 小猫场景 - 第一屏 -->
     <div class="cat-scene-section">
         <div class="container">
-            <canvas id="catCanvas" width="1600" height="1200"></canvas>
+            <div class="canvas-wrapper">
+                <canvas id="catCanvas" width="1600" height="1200"></canvas>
+            </div>
         </div>
 
-        <!-- 向下滚动提示 -->
-        <div class="scroll-hint scroll-hint-left" onclick="window.scrollTo({top: window.innerHeight * 0.6, behavior: 'smooth'})">⬇️</div>
-        <div class="scroll-hint scroll-hint-right" onclick="window.scrollTo({top: window.innerHeight * 0.6, behavior: 'smooth'})">⬇️</div>
+        <!-- 向下滚动提示 - 使用catUI素材 -->
+        <div class="scroll-hint scroll-hint-left" onclick="window.scrollTo({top: window.innerHeight * 0.6, behavior: 'smooth'})">
+            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="width: 60px; height: 60px; object-fit: contain; object-position: -200px -450px;">
+        </div>
+        <div class="scroll-hint scroll-hint-right" onclick="window.scrollTo({top: window.innerHeight * 0.6, behavior: 'smooth'})">
+            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="width: 60px; height: 60px; object-fit: contain; object-position: -200px -450px;">
+        </div>
     </div>
 
     <!-- 可滚动的主内容区域 -->
