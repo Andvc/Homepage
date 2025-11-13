@@ -296,7 +296,7 @@ class CatAnimation {
 
         const welcomeText = '欢迎来到咪小屋 🐱';
         const textX = 50;
-        const textY = 30;
+        const textY = 120;  // 向下调整，避免被顶部裁剪
 
         // 绘制文字描边（阴影效果）
         this.ctx.strokeText(welcomeText, textX, textY);
