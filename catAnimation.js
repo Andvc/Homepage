@@ -310,15 +310,9 @@ class CatAnimation {
             });
         }
 
-        // 高亮悬停的热区（2倍缩放）
+        // 显示悬停热区的提示文字
         if (this.hoveredHotspot && !this.isDragging) {
             const h = this.hoveredHotspot;
-            this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.8)';
-            this.ctx.lineWidth = 6;
-            this.ctx.strokeRect(h.x, h.y, h.width, h.height);
-
-            this.ctx.fillStyle = 'rgba(255, 255, 0, 0.2)';
-            this.ctx.fillRect(h.x, h.y, h.width, h.height);
 
             // 显示提示文字（根据实际文字宽度，居中显示）
             this.ctx.font = '24px Arial';
