@@ -424,8 +424,9 @@
 </head>
 <body>
     <!-- 背景视频 -->
-    <video id="bg-video" autoplay loop muted playsinline>
-        <source src="public/Andvc/MuseDash.mp4" type="video/mp4">
+    <video id="bg-video" autoplay loop muted playsinline preload="auto">
+        <source src="./public/Andvc/MuseDash.mp4" type="video/mp4">
+        您的浏览器不支持视频播放。
     </video>
 
     <!-- 音乐播放器 -->
@@ -637,6 +638,31 @@
 
     <script src="catAnimation.js"></script>
     <script>
+        // 强制加载背景视频
+        const bgVideo = document.getElementById('bg-video');
+
+        // 监听视频错误
+        bgVideo.addEventListener('error', (e) => {
+            console.error('视频加载失败:', e);
+            console.error('视频源:', bgVideo.querySelector('source').src);
+        });
+
+        // 监听视频加载成功
+        bgVideo.addEventListener('loadeddata', () => {
+            console.log('视频加载成功');
+            bgVideo.play().catch(err => {
+                console.error('视频播放失败:', err);
+            });
+        });
+
+        // 页面加载完成后强制加载视频
+        window.addEventListener('load', () => {
+            bgVideo.load();
+            bgVideo.play().catch(err => {
+                console.log('自动播放被阻止，等待用户交互');
+            });
+        });
+
         // 音乐播放器控制
         const musicToggle = document.getElementById('musicToggle');
         const bgMusic = document.getElementById('bg-music');
