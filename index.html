@@ -81,7 +81,7 @@
         /* 小猫场景容器 - 正常文档流 */
         .cat-scene-section {
             width: 100%;
-            min-height: 100vh;
+            min-height: 75vh;
             background: transparent;
             display: flex;
             justify-content: center;
@@ -98,7 +98,7 @@
             border-radius: 20px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            max-width: 1800px;
+            max-width: 1400px;
         }
 
         #catCanvas {
@@ -109,6 +109,9 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
+            /* CSS缩放：显示尺寸缩小25%，内部坐标系保持1600x1200不变 */
+            width: 1200px;
+            height: 900px;
         }
 
         /* 主内容区域 */
