@@ -158,7 +158,8 @@ class CatAnimation {
                 name: '玩具球',
                 x: 480, y: 780, width: 60, height: 60,
                 action: 'Dance',
-                description: '松开鼠标跳舞？？',
+                description: '拖动到玩具球，猫咪会跳舞。。。什么？',
+                dragHint: '松开鼠标跳舞？？',  // 拖动时的提示文字
                 snapPoint: { x: 540, y: 800 }  // 吸附点：球旁边
             },
             {
@@ -377,13 +378,18 @@ class CatAnimation {
                 this.ctx.arc(this.activeSnapZone.snapPoint.x, this.activeSnapZone.snapPoint.y, 15, 0, Math.PI * 2);
                 this.ctx.fill();
 
-                // 绘制提示文字
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-                this.ctx.fillRect(this.activeSnapZone.snapPoint.x - 100, this.activeSnapZone.snapPoint.y - 60, 200, 40);
-                this.ctx.fillStyle = '#fff';
+                // 绘制提示文字（使用自定义dragHint或默认文字）
+                const hintText = this.activeSnapZone.dragHint || `松开鼠标进入${this.activeSnapZone.name}`;
                 this.ctx.font = '20px Arial';
+                const hintMetrics = this.ctx.measureText(hintText);
+                const hintBoxWidth = hintMetrics.width + 40;
+                const hintBoxX = this.activeSnapZone.snapPoint.x - hintBoxWidth / 2;
+
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                this.ctx.fillRect(hintBoxX, this.activeSnapZone.snapPoint.y - 60, hintBoxWidth, 40);
+                this.ctx.fillStyle = '#fff';
                 this.ctx.textAlign = 'center';
-                this.ctx.fillText(`松开鼠标进入${this.activeSnapZone.name}`, this.activeSnapZone.snapPoint.x, this.activeSnapZone.snapPoint.y - 35);
+                this.ctx.fillText(hintText, this.activeSnapZone.snapPoint.x, this.activeSnapZone.snapPoint.y - 35);
             }
         }
 
