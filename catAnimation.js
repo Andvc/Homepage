@@ -440,18 +440,26 @@ class CatAnimation {
                     if (currentState.timeout.random) {
                         // Random selection based on probability
                         const rand = Math.random();
+                        console.log(`🎲 Random roll: ${rand.toFixed(3)} for state ${this.currentAnimation}`);
                         let cumulative = 0;
                         for (const option of currentState.timeout.random) {
                             cumulative += option.probability;
+                            console.log(`  Checking ${option.state}: cumulative ${cumulative}`);
                             if (rand < cumulative) {
                                 nextState = option.state;
+                                console.log(`  ✓ Selected: ${nextState}`);
                                 break;
                             }
                         }
                     } else {
                         nextState = currentState.timeout.state;
                     }
-                    this.changeState(nextState, 'auto-timeout');
+                    if (nextState) {
+                        console.log(`⏰ Auto-timeout: ${this.currentAnimation} → ${nextState}`);
+                        this.changeState(nextState, 'auto-timeout');
+                    } else {
+                        console.warn(`⚠️ No next state selected for ${this.currentAnimation}`);
+                    }
                 }
             }, currentState.timeout.delay);
         }
