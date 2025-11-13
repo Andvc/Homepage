@@ -39,19 +39,33 @@ class CatAnimation {
             },
             'Excited': {
                 onDragEnd: 'Idle',         // 拖动结束进入待机
-                timeout: { state: 'Sleepy', delay: 3000 }  // 3秒后困倦
+                timeout: { state: 'Idle', delay: 3000 }  // 3秒后回到正常
             },
             'Idle': {
                 onHover: 'Idle2',          // 悬停时换个待机姿势
                 onDragStart: 'Excited',    // 拖动时兴奋
                 onClick: 'Surprised',       // 点击时惊讶
-                timeout: { state: 'Sleepy', delay: 5000 }  // 5秒后困倦
+                timeout: {
+                    // 随机分支：70%概率困倦，30%概率悲伤
+                    random: [
+                        { state: 'Sleepy', probability: 0.7 },
+                        { state: 'Sad', probability: 0.3 }
+                    ],
+                    delay: 5000  // 5秒后触发
+                }
             },
             'Idle2': {
                 onHoverLeave: 'Idle',      // 离开后回到普通待机
                 onDragStart: 'Excited',
                 onClick: 'Surprised',
-                timeout: { state: 'Sleepy', delay: 5000 }
+                timeout: {
+                    // 随机分支：70%概率困倦，30%概率悲伤
+                    random: [
+                        { state: 'Sleepy', probability: 0.7 },
+                        { state: 'Sad', probability: 0.3 }
+                    ],
+                    delay: 5000
+                }
             },
             'Sleepy': {
                 onDragStart: 'Surprised',  // 困倦时拖动会惊讶
@@ -61,19 +75,19 @@ class CatAnimation {
             'Sleep': {
                 onDragStart: 'Surprised',  // 睡觉时拖动会惊醒
                 onClick: 'Surprised',      // 睡觉时点击会惊醒
-                timeout: null              // 睡觉不会自动转换
+                timeout: null              // 睡觉持续，不会自动转换
             },
             'Surprised': {
                 timeout: { state: 'Idle', delay: 2000 }  // 2秒后回到待机
             },
             'Eating': {
-                timeout: { state: 'Sleepy', delay: 5000 }  // 5秒后困倦
+                timeout: { state: 'Idle', delay: 5000 }  // 5秒后回到正常
             },
             'Dance': {
-                timeout: { state: 'Sleepy', delay: 3000 }  // 3秒后困倦
+                timeout: { state: 'Idle', delay: 3000 }  // 3秒后回到正常
             },
             'Waiting': {
-                timeout: { state: 'Idle', delay: 2000 }
+                timeout: { state: 'Idle', delay: 2000 }  // 回到正常
             },
             'LayDown': {
                 onDragStart: 'Surprised',
@@ -81,17 +95,17 @@ class CatAnimation {
                 timeout: null  // 持续状态，不会自动转换
             },
             'Cry': {
-                timeout: { state: 'Sad', delay: 2000 }
+                timeout: { state: 'Idle', delay: 3000 }  // 哭泣3秒后回到正常
             },
             'Sad': {
                 onClick: 'Surprised',
-                timeout: { state: 'Idle', delay: 4000 }
+                timeout: { state: 'Cry', delay: 2000 }  // 悲伤2秒后哭泣
             },
             'CatSick1': {
-                timeout: { state: 'Sleepy', delay: 5000 }  // 5秒后困倦
+                timeout: { state: 'Idle', delay: 5000 }  // 5秒后回到正常
             },
             'CatSick2': {
-                timeout: { state: 'Sleepy', delay: 3000 }
+                timeout: { state: 'Idle', delay: 3000 }  // 回到正常
             }
         };
 
@@ -422,7 +436,22 @@ class CatAnimation {
         if (currentState && currentState.timeout) {
             this.stateTimer = setTimeout(() => {
                 if (!this.manualControl && !this.isDragging) {
-                    this.changeState(currentState.timeout.state, 'auto-timeout');
+                    let nextState;
+                    if (currentState.timeout.random) {
+                        // Random selection based on probability
+                        const rand = Math.random();
+                        let cumulative = 0;
+                        for (const option of currentState.timeout.random) {
+                            cumulative += option.probability;
+                            if (rand < cumulative) {
+                                nextState = option.state;
+                                break;
+                            }
+                        }
+                    } else {
+                        nextState = currentState.timeout.state;
+                    }
+                    this.changeState(nextState, 'auto-timeout');
                 }
             }, currentState.timeout.delay);
         }
