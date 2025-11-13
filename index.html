@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cat Homepage</title>
-    <!-- 导入像素字体 -->
+    <!-- 导入字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -101,6 +101,29 @@
             max-width: 1800px;
         }
 
+        /* 首页引入语 */
+        .welcome-text {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 28px;
+            color: #FFF8F0;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         #catCanvas {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
@@ -165,13 +188,13 @@
 
         /* 像素风格标题 */
         .pixel-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 32px;
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 42px;
             color: #FFF8F0;
             text-align: center;
             margin-bottom: 60px;
             text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
-            image-rendering: pixelated;
+            letter-spacing: 3px;
         }
 
         /* 工作室场景容器 */
@@ -277,10 +300,11 @@
         }
 
         .profile-name {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 24px;
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 32px;
             color: #4A4A4A;
             margin-bottom: 8px;
+            letter-spacing: 2px;
         }
 
         .profile-title {
@@ -339,11 +363,12 @@
         }
 
         .skills-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 18px;
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 24px;
             color: #2A4A42;
             margin-bottom: 20px;
             text-align: center;
+            letter-spacing: 2px;
         }
 
         /* 技能进度条 */
@@ -445,6 +470,7 @@
     <!-- 小猫场景 - 第一屏 -->
     <div class="cat-scene-section">
         <div class="container">
+            <div class="welcome-text">欢迎来到 Andvc 的数字小屋 🐱</div>
             <canvas id="catCanvas" width="1600" height="1200"></canvas>
         </div>
     </div>
