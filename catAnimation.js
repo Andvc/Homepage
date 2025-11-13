@@ -319,7 +319,7 @@ class CatAnimation {
             this.ctx.fillStyle = 'rgba(255, 255, 0, 0.2)';
             this.ctx.fillRect(h.x, h.y, h.width, h.height);
 
-            // 显示提示文字（根据实际文字宽度）
+            // 显示提示文字（根据实际文字宽度，居中显示）
             this.ctx.font = '24px Arial';
             const textMetrics = this.ctx.measureText(h.description);
             const textWidth = textMetrics.width;
@@ -327,14 +327,18 @@ class CatAnimation {
             const boxWidth = textWidth + padding * 2;
             const boxHeight = 44;
 
-            // 绘制背景黑框
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            this.ctx.fillRect(h.x, h.y - 50, boxWidth, boxHeight);
+            // 计算物品中心位置
+            const hotspotCenterX = h.x + h.width / 2;
+            const boxX = hotspotCenterX - boxWidth / 2;
 
-            // 绘制文字（左对齐，留padding）
+            // 绘制背景黑框（居中在物品上方）
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(boxX, h.y - 50, boxWidth, boxHeight);
+
+            // 绘制文字（居中对齐）
             this.ctx.fillStyle = '#fff';
-            this.ctx.textAlign = 'left';
-            this.ctx.fillText(h.description, h.x + padding, h.y - 20);
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(h.description, hotspotCenterX, h.y - 20);
         }
 
         // 绘制吸附虚影（如果正在拖动且在吸附区域内）
