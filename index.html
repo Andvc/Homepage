@@ -19,6 +19,63 @@
             font-family: 'Arial', sans-serif;
             background: #1a1a2e;
             color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 全页面背景视频 */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.4;
+            filter: blur(2px);
+        }
+
+        /* 音乐播放器 */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid #F4A259;
+            border-radius: 50px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(244, 162, 89, 0.3);
+        }
+
+        .music-btn {
+            width: 40px;
+            height: 40px;
+            background: #F4A259;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background: #F27C5A;
+            transform: scale(1.1);
+        }
+
+        .music-info {
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            color: #FFF8F0;
         }
 
         /* 小猫场景容器 - 正常文档流 */
@@ -196,8 +253,8 @@
         }
 
         .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             border: 4px solid #D4A574;
             background: #E8C4C4;
@@ -205,7 +262,14 @@
             align-items: center;
             justify-content: center;
             font-size: 40px;
-            image-rendering: pixelated;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .profile-name {
@@ -359,6 +423,20 @@
     </style>
 </head>
 <body>
+    <!-- 背景视频 -->
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="public/Andvc/Muse Dash.mp4" type="video/mp4">
+    </video>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+        <button class="music-btn" id="musicToggle">▶️</button>
+        <div class="music-info">Background Music</div>
+    </div>
+    <audio id="bg-music" loop>
+        <source src="public/Andvc/Music.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- 小猫场景 - 第一屏 -->
     <div class="cat-scene-section">
         <div class="container">
@@ -393,21 +471,26 @@
                         <!-- 个人信息卡片 -->
                         <div class="profile-card">
                             <div class="profile-header">
-                                <div class="profile-avatar">🐱</div>
+                                <div class="profile-avatar">
+                                    <img src="public/Andvc/头像.jpg" alt="Andvc">
+                                </div>
                                 <div>
-                                    <div class="profile-name">Your Name</div>
-                                    <div class="profile-title">Creative Developer</div>
+                                    <div class="profile-name">Andvc</div>
+                                    <div class="profile-title">ZJU | 应用数学 | ITP</div>
                                 </div>
                             </div>
                             <div class="profile-description">
-                                Hello! I'm a passionate developer who loves creating pixel art and interactive experiences.
-                                I enjoy combining code with creativity to build engaging digital worlds.
+                                21岁 | 男 | 喜欢打游戏、深度思考、创造自己喜欢的东西<br>
+                                现在在做：游戏行研 | 打 Game Jam<br>
+                                最近在玩：Hades 2 | 逃离鸭科夫<br><br>
+                                「生不带来，死不带去，千年后，还有痕迹吗？」<br>
+                                「人生没有巅峰，只有攀爬，也许在那极高无人之处，有永恒存在。」
                             </div>
                             <div class="skill-tags">
-                                <span class="skill-tag">Frontend</span>
-                                <span class="skill-tag">Design</span>
-                                <span class="skill-tag">Pixel Art</span>
-                                <span class="skill-tag">Animation</span>
+                                <span class="skill-tag">游戏设计</span>
+                                <span class="skill-tag">Game Jam</span>
+                                <span class="skill-tag">数学建模</span>
+                                <span class="skill-tag">深度思考</span>
                             </div>
                         </div>
 
@@ -417,7 +500,17 @@
 
                             <div class="skill-item">
                                 <div class="skill-name">
-                                    <span>JavaScript</span>
+                                    <span>游戏设计</span>
+                                    <span>88%</span>
+                                </div>
+                                <div class="skill-bar-container">
+                                    <div class="skill-bar" style="width: 88%"></div>
+                                </div>
+                            </div>
+
+                            <div class="skill-item">
+                                <div class="skill-name">
+                                    <span>数学建模</span>
                                     <span>85%</span>
                                 </div>
                                 <div class="skill-bar-container">
@@ -427,31 +520,21 @@
 
                             <div class="skill-item">
                                 <div class="skill-name">
-                                    <span>HTML/CSS</span>
+                                    <span>游戏分析</span>
+                                    <span>82%</span>
+                                </div>
+                                <div class="skill-bar-container">
+                                    <div class="skill-bar" style="width: 82%"></div>
+                                </div>
+                            </div>
+
+                            <div class="skill-item">
+                                <div class="skill-name">
+                                    <span>创意思维</span>
                                     <span>90%</span>
                                 </div>
                                 <div class="skill-bar-container">
                                     <div class="skill-bar" style="width: 90%"></div>
-                                </div>
-                            </div>
-
-                            <div class="skill-item">
-                                <div class="skill-name">
-                                    <span>React</span>
-                                    <span>75%</span>
-                                </div>
-                                <div class="skill-bar-container">
-                                    <div class="skill-bar" style="width: 75%"></div>
-                                </div>
-                            </div>
-
-                            <div class="skill-item">
-                                <div class="skill-name">
-                                    <span>Design</span>
-                                    <span>80%</span>
-                                </div>
-                                <div class="skill-bar-container">
-                                    <div class="skill-bar" style="width: 80%"></div>
                                 </div>
                             </div>
                         </div>
@@ -497,18 +580,88 @@
         </section>
 
         <section class="section" id="contact">
-            <h2>联系方式</h2>
-            <div class="section-content">
-                <p>
-                    这里是您的联系方式...
-                </p>
-                <p style="margin-top: 20px;">
-                    可以添加邮箱、社交媒体链接、GitHub、LinkedIn等联系方式。
-                </p>
+            <h1 class="pixel-title">< CONTACT ></h1>
+
+            <div class="studio-scene">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <!-- 联系卡片 -->
+                    <div class="profile-card">
+                        <div class="skills-title" style="margin-bottom: 30px;">联系方式</div>
+
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <!-- Email -->
+                            <a href="mailto:Scottvan@126.com" style="text-decoration: none; color: inherit;">
+                                <div class="skill-tag" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 15px; font-size: 18px;">
+                                    <span style="font-size: 24px;">📧</span>
+                                    <span>Scottvan@126.com</span>
+                                </div>
+                            </a>
+
+                            <!-- Bilibili -->
+                            <a href="https://space.bilibili.com/333360446" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div class="skill-tag" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 15px; font-size: 18px; background: #FBE5E5; border-color: #FF85A3;">
+                                    <span style="font-size: 24px;">📺</span>
+                                    <span>Bilibili</span>
+                                </div>
+                            </a>
+
+                            <!-- 小红书 -->
+                            <a href="https://www.xiaohongshu.com/user/profile/630ac576000000001200e4e7" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div class="skill-tag" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 15px; font-size: 18px; background: #FFE5E5; border-color: #FF6B6B;">
+                                    <span style="font-size: 24px;">📕</span>
+                                    <span>小红书</span>
+                                </div>
+                            </a>
+
+                            <!-- 机核网 -->
+                            <a href="https://www.gcores.com/users/844737" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div class="skill-tag" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 15px; font-size: 18px; background: #E5F5FF; border-color: #4A9EFF;">
+                                    <span style="font-size: 24px;">🎮</span>
+                                    <span>机核网</span>
+                                </div>
+                            </a>
+
+                            <!-- Steam -->
+                            <a href="https://steamcommunity.com/profiles/76561198212645887/" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div class="skill-tag" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 15px; font-size: 18px; background: #E5E5F0; border-color: #6B7AFF;">
+                                    <span style="font-size: 24px;">🎲</span>
+                                    <span>Steam</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
 
     <script src="catAnimation.js"></script>
+    <script>
+        // 音乐播放器控制
+        const musicToggle = document.getElementById('musicToggle');
+        const bgMusic = document.getElementById('bg-music');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicToggle.textContent = '▶️';
+            } else {
+                bgMusic.play();
+                musicToggle.textContent = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // 进度条动画
+        window.addEventListener('load', () => {
+            const skillBars = document.querySelectorAll('.skill-bar');
+            setTimeout(() => {
+                skillBars.forEach(bar => {
+                    bar.style.width = bar.style.width;
+                });
+            }, 500);
+        });
+    </script>
 </body>
 </html>
