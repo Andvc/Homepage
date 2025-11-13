@@ -116,7 +116,7 @@ class CatAnimation {
                 timeout: { state: 'DeadCat', delay: 3000 }  // 3秒后变成死猫
             },
             'DeadCat': {
-                timeout: { state: 'Box3', delay: 2000 }  // 2秒后进入棺材
+                timeout: { state: 'Box3', delay: 6000 }  // 6秒后进入棺材
             },
             'Box3': {
                 timeout: null  // 持续状态，RIP
@@ -184,7 +184,7 @@ class CatAnimation {
         ];
 
 
-        this.currentAnimation = 'Box1';  // 初始状态：在箱子里
+        this.currentAnimation = 'Box3';  // 初始状态：在棺材里（Box3）
         this.currentFrame = 0;
         this.frameDelay = 100;
         this.lastFrameTime = Date.now();
@@ -192,9 +192,9 @@ class CatAnimation {
         this.backgroundImage = null;
         this.isLoading = true;
 
-        // 猫咪位置和缩放（初始在场景中央）
+        // 猫咪位置和缩放（初始在场景中下部）
         this.catX = this.canvas.width / 2;
-        this.catY = this.canvas.height / 2;
+        this.catY = this.canvas.height / 2 + 200;  // 往下200像素
         this.scale = 3;  // 从4缩小到3，相对场景更小
 
         // 状态管理
