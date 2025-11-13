@@ -219,7 +219,7 @@ class CatAnimation {
         // 加载背景图
         this.backgroundImage = new Image();
         this.backgroundImage.onload = () => {
-            console.log('Background loaded');
+            // Background loaded
         };
         this.backgroundImage.onerror = () => {
             console.error('Failed to load background');
@@ -418,27 +418,6 @@ class CatAnimation {
             sx, sy, frameWidth, frameHeight,
             dx, dy, drawWidth, drawHeight
         );
-
-        // 显示状态信息（放大2倍适应新canvas）
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        this.ctx.fillRect(10, 10, 400, 170);
-
-        this.ctx.fillStyle = '#fff';
-        this.ctx.font = '28px Arial';
-        this.ctx.textAlign = 'left';
-        this.ctx.fillText(`State: ${this.currentAnimation}`, 20, 45);
-        this.ctx.fillText(`Frame: ${this.currentFrame + 1}/${frameCount}`, 20, 85);
-        this.ctx.fillText(`Mode: ${this.manualControl ? 'Manual' : 'Auto'}`, 20, 125);
-        this.ctx.fillText(`Hotspot: ${this.hoveredHotspot?.name || 'None'}`, 20, 165);
-
-        // 悬停在猫咪上的提示
-        if (this.isHovering && !this.hoveredHotspot) {
-            this.ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
-            const bounds = this.getCatBounds();
-            if (bounds) {
-                this.ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-            }
-        }
     }
 
     changeState(newState, reason = 'manual') {
@@ -447,15 +426,8 @@ class CatAnimation {
             return;
         }
 
-        console.log(`State transition: ${this.currentAnimation} → ${newState} (${reason})`);
-
         this.currentAnimation = newState;
         this.currentFrame = 0;
-
-        const animationLabel = document.getElementById('currentAnimation');
-        if (animationLabel) {
-            animationLabel.textContent = newState;
-        }
 
         if (this.stateTimer) {
             clearTimeout(this.stateTimer);
@@ -527,8 +499,6 @@ class CatAnimation {
 
         // 如果在吸附区域，执行吸附
         if (this.activeSnapZone) {
-            console.log(`Snapping to ${this.activeSnapZone.name}`);
-
             // 移动猫咪到吸附点
             this.catX = this.activeSnapZone.snapPoint.x;
             this.catY = this.activeSnapZone.snapPoint.y;
@@ -560,7 +530,6 @@ class CatAnimation {
 
         // 检查是否触发彩蛋（连续3次点击）
         if (this.clickCount >= 3) {
-            console.log('🎉 彩蛋触发！猫咪要进入Box3了...');
             this.clickCount = 0;  // 重置计数器
             this.changeState('CatSick2', 'easter-egg-3-clicks');
             return;
@@ -583,7 +552,6 @@ class CatAnimation {
         for (const hotspot of this.sceneHotspots) {
             if (x >= hotspot.x && x <= hotspot.x + hotspot.width &&
                 y >= hotspot.y && y <= hotspot.y + hotspot.height) {
-                console.log(`Hotspot clicked: ${hotspot.name} → ${hotspot.action}`);
                 this.changeState(hotspot.action, `hotspot-${hotspot.name}`);
                 return true;
             }
