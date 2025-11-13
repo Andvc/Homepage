@@ -46,10 +46,10 @@ class CatAnimation {
                 onDragStart: 'Excited',    // 拖动时兴奋
                 onClick: 'Surprised',       // 点击时惊讶
                 timeout: {
-                    // 随机分支：70%概率困倦，30%概率悲伤
+                    // 随机分支：85%概率困倦，15%概率悲伤
                     random: [
-                        { state: 'Sleepy', probability: 0.7 },
-                        { state: 'Sad', probability: 0.3 }
+                        { state: 'Sleepy', probability: 0.85 },
+                        { state: 'Sad', probability: 0.15 }
                     ],
                     delay: 5000  // 5秒后触发
                 }
@@ -59,10 +59,10 @@ class CatAnimation {
                 onDragStart: 'Excited',
                 onClick: 'Surprised',
                 timeout: {
-                    // 随机分支：70%概率困倦，30%概率悲伤
+                    // 随机分支：85%概率困倦，15%概率悲伤
                     random: [
-                        { state: 'Sleepy', probability: 0.7 },
-                        { state: 'Sad', probability: 0.3 }
+                        { state: 'Sleepy', probability: 0.85 },
+                        { state: 'Sad', probability: 0.15 }
                     ],
                     delay: 5000
                 }
@@ -440,14 +440,11 @@ class CatAnimation {
                     if (currentState.timeout.random) {
                         // Random selection based on probability
                         const rand = Math.random();
-                        console.log(`🎲 Random roll: ${rand.toFixed(3)} for state ${this.currentAnimation}`);
                         let cumulative = 0;
                         for (const option of currentState.timeout.random) {
                             cumulative += option.probability;
-                            console.log(`  Checking ${option.state}: cumulative ${cumulative}`);
                             if (rand < cumulative) {
                                 nextState = option.state;
-                                console.log(`  ✓ Selected: ${nextState}`);
                                 break;
                             }
                         }
@@ -455,10 +452,7 @@ class CatAnimation {
                         nextState = currentState.timeout.state;
                     }
                     if (nextState) {
-                        console.log(`⏰ Auto-timeout: ${this.currentAnimation} → ${nextState}`);
                         this.changeState(nextState, 'auto-timeout');
-                    } else {
-                        console.warn(`⚠️ No next state selected for ${this.currentAnimation}`);
                     }
                 }
             }, currentState.timeout.delay);
