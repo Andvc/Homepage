@@ -44,12 +44,16 @@ class CatAnimation {
             'Idle': {
                 onHover: 'Idle2',          // 悬停时换个待机姿势
                 onDragStart: 'Excited',    // 拖动时兴奋
-                onClick: 'Surprised',       // 点击时惊讶
+                onClick: 'Surprised',       // 点击时惊讶（连续3次有彩蛋）
                 timeout: {
-                    // 随机分支：85%概率困倦，15%概率悲伤
+                    // 多样化随机行为
                     random: [
-                        { state: 'Sleepy', probability: 0.85 },
-                        { state: 'Sad', probability: 0.15 }
+                        { state: 'Sleepy', probability: 0.50 },    // 50% 困倦
+                        { state: 'Excited', probability: 0.12 },   // 12% 兴奋
+                        { state: 'CatSick1', probability: 0.10 },  // 10% 生病1
+                        { state: 'Dance', probability: 0.10 },     // 10% 跳舞
+                        { state: 'Eating', probability: 0.10 },    // 10% 吃东西
+                        { state: 'Sad', probability: 0.08 }        // 8% 悲伤
                     ],
                     delay: 5000  // 5秒后触发
                 }
@@ -57,12 +61,16 @@ class CatAnimation {
             'Idle2': {
                 onHoverLeave: 'Idle',      // 离开后回到普通待机
                 onDragStart: 'Excited',
-                onClick: 'Surprised',
+                onClick: 'Surprised',       // 点击时惊讶（连续3次有彩蛋）
                 timeout: {
-                    // 随机分支：85%概率困倦，15%概率悲伤
+                    // 多样化随机行为
                     random: [
-                        { state: 'Sleepy', probability: 0.85 },
-                        { state: 'Sad', probability: 0.15 }
+                        { state: 'Sleepy', probability: 0.50 },    // 50% 困倦
+                        { state: 'Excited', probability: 0.12 },   // 12% 兴奋
+                        { state: 'CatSick1', probability: 0.10 },  // 10% 生病1
+                        { state: 'Dance', probability: 0.10 },     // 10% 跳舞
+                        { state: 'Eating', probability: 0.10 },    // 10% 吃东西
+                        { state: 'Sad', probability: 0.08 }        // 8% 悲伤
                     ],
                     delay: 5000
                 }
@@ -105,7 +113,13 @@ class CatAnimation {
                 timeout: { state: 'Idle', delay: 5000 }  // 5秒后回到正常
             },
             'CatSick2': {
-                timeout: { state: 'Idle', delay: 3000 }  // 回到正常
+                timeout: { state: 'DeadCat', delay: 3000 }  // 3秒后变成死猫
+            },
+            'DeadCat': {
+                timeout: { state: 'Box3', delay: 2000 }  // 2秒后进入棺材
+            },
+            'Box3': {
+                timeout: null  // 持续状态，RIP
             }
         };
 
@@ -191,6 +205,10 @@ class CatAnimation {
         this.hoveredHotspot = null;  // 当前悬停的热区
         this.showHotspots = false;   // 是否显示热区（调试用）
         this.activeSnapZone = null;  // 当前拖动到的吸附区域
+
+        // 连续点击彩蛋计数器
+        this.clickCount = 0;
+        this.clickResetTimer = null;
 
         this.preloadAnimations();
     }
@@ -514,6 +532,28 @@ class CatAnimation {
     handleClick() {
         if (this.manualControl || this.isDragging) return;
 
+        // 连续点击彩蛋检测
+        this.clickCount++;
+
+        // 清除之前的重置计时器
+        if (this.clickResetTimer) {
+            clearTimeout(this.clickResetTimer);
+        }
+
+        // 检查是否触发彩蛋（连续3次点击）
+        if (this.clickCount >= 3) {
+            console.log('🎉 彩蛋触发！猫咪要进入Box3了...');
+            this.clickCount = 0;  // 重置计数器
+            this.changeState('CatSick2', 'easter-egg-3-clicks');
+            return;
+        }
+
+        // 设置2秒后重置点击计数
+        this.clickResetTimer = setTimeout(() => {
+            this.clickCount = 0;
+        }, 2000);
+
+        // 正常的点击行为
         const currentState = this.states[this.currentAnimation];
         if (currentState && currentState.onClick) {
             this.changeState(currentState.onClick, 'click');
