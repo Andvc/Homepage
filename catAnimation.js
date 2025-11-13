@@ -285,6 +285,25 @@ class CatAnimation {
             this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
         }
 
+        // 绘制欢迎文字（在场景顶端）
+        this.ctx.save();
+        this.ctx.font = '48px "ZCOOL KuaiLe", "Noto Sans SC", cursive';
+        this.ctx.fillStyle = '#FFF8F0';
+        this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        this.ctx.lineWidth = 3;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'top';
+
+        const welcomeText = '欢迎来到 Andvc 的数字小屋 🐱';
+        const textX = this.canvas.width / 2;
+        const textY = 40;
+
+        // 绘制文字描边（阴影效果）
+        this.ctx.strokeText(welcomeText, textX, textY);
+        // 绘制文字填充
+        this.ctx.fillText(welcomeText, textX, textY);
+        this.ctx.restore();
+
         if (this.isLoading) {
             this.ctx.fillStyle = '#333';
             this.ctx.font = '24px Arial';
