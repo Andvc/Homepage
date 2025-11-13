@@ -17,7 +17,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: #1a1a2e;
+            background: transparent;
             color: #fff;
             position: relative;
             overflow-x: hidden;
@@ -31,9 +31,9 @@
             width: 100vw;
             height: 100vh;
             object-fit: cover;
-            z-index: 9999;
-            opacity: 1.0;
-            /* filter: blur(2px); */
+            z-index: 1;
+            opacity: 0.4;
+            filter: blur(2px);
         }
 
         /* 音乐播放器 */
@@ -82,11 +82,13 @@
         .cat-scene-section {
             width: 100%;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: transparent;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            z-index: 10;
         }
 
         .container {
@@ -111,7 +113,9 @@
 
         /* 主内容区域 */
         .main-content {
-            background: #1a1a2e;
+            background: transparent;
+            position: relative;
+            z-index: 10;
         }
 
         .section {
@@ -148,13 +152,13 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* 不同section的背景色 */
+        /* 不同section的背景色 - 删除以显示视频背景 */
         .section:nth-child(odd) {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            background: transparent;
         }
 
         .section:nth-child(even) {
-            background: linear-gradient(180deg, #16213e 0%, #0f3460 100%);
+            background: transparent;
         }
 
         /* ========== 像素风格组件 ========== */
