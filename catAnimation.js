@@ -318,15 +318,22 @@ class CatAnimation {
             this.ctx.fillStyle = 'rgba(255, 255, 0, 0.2)';
             this.ctx.fillRect(h.x, h.y, h.width, h.height);
 
-            // 显示提示文字（放大2倍）
-            const textWidth = h.width + 120;
-            const textHeight = 44;
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            this.ctx.fillRect(h.x, h.y - 50, textWidth, textHeight);
-            this.ctx.fillStyle = '#fff';
+            // 显示提示文字（根据实际文字宽度）
             this.ctx.font = '24px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText(h.description, h.x + textWidth/2, h.y - 20);
+            const textMetrics = this.ctx.measureText(h.description);
+            const textWidth = textMetrics.width;
+            const padding = 20;  // 左右padding
+            const boxWidth = textWidth + padding * 2;
+            const boxHeight = 44;
+
+            // 绘制背景黑框
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(h.x, h.y - 50, boxWidth, boxHeight);
+
+            // 绘制文字（左对齐，留padding）
+            this.ctx.fillStyle = '#fff';
+            this.ctx.textAlign = 'left';
+            this.ctx.fillText(h.description, h.x + padding, h.y - 20);
         }
 
         // 绘制吸附虚影（如果正在拖动且在吸附区域内）
