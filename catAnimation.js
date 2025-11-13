@@ -119,7 +119,8 @@ class CatAnimation {
                 timeout: { state: 'Box3', delay: 6000 }  // 6秒后进入棺材
             },
             'Box3': {
-                timeout: null  // 持续状态，RIP
+                onDragStart: 'Excited',    // 拖动时进入兴奋状态
+                timeout: null              // 持续状态，RIP
             }
         };
 
