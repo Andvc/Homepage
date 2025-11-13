@@ -100,13 +100,13 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             max-width: 1400px;
             overflow: hidden;
-            max-height: 700px;
+            max-height: 820px;
         }
 
-        /* Canvas包装器 - 裁剪上下空余 */
+        /* Canvas包装器 - 只裁剪顶部空余 */
         .canvas-wrapper {
             position: relative;
-            height: 700px;
+            height: 820px;
             overflow: hidden;
         }
 
@@ -119,12 +119,13 @@
         .scroll-hint {
             position: absolute;
             bottom: 30px;
-            width: 60px;
-            height: 60px;
+            width: 48px;
+            height: 48px;
             animation: floatUpDown 2s ease-in-out infinite;
             cursor: pointer;
             z-index: 15;
             filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            overflow: hidden;
         }
 
         .scroll-hint img {
@@ -507,10 +508,10 @@
 
         <!-- 向下滚动提示 - 使用catUI素材 -->
         <div class="scroll-hint scroll-hint-left" onclick="window.scrollTo({top: window.innerHeight * 0.6, behavior: 'smooth'})">
-            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="width: 60px; height: 60px; object-fit: contain; object-position: -200px -450px;">
+            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="width: 48px; height: 48px; object-fit: none; object-position: -340px -58px;">
         </div>
         <div class="scroll-hint scroll-hint-right" onclick="window.scrollTo({top: window.innerHeight * 0.6, behavior: 'smooth'})">
-            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="width: 60px; height: 60px; object-fit: contain; object-position: -200px -450px;">
+            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="width: 48px; height: 48px; object-fit: none; object-position: -340px -58px;">
         </div>
     </div>
 
