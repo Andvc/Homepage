@@ -735,8 +735,6 @@
                                 <rect x="94" y="5" width="4" height="70" fill="#6B5A4A"/>
                             </svg>
                         </div>
-                        <div class="plant decoration-item">🌿</div>
-                        <div class="plant decoration-item">🌱</div>
                     </div>
 
                     <!-- 中央内容区 -->
@@ -812,54 +810,64 @@
                         </div>
                     </div>
 
-                    <!-- 右侧联系方式 -->
+                    <!-- 右侧装饰和联系方式 -->
                     <div class="studio-right">
-                        <div class="skills-title" style="margin-bottom: 20px; color: #8B6F47;">联系方式</div>
+                        <!-- 梯子装饰 -->
+                        <div class="decoration-item" style="margin-bottom: 30px;">
+                            <svg class="shelf" viewBox="0 0 100 80" style="filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));">
+                                <rect x="5" y="10" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="5" y="35" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="5" y="60" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="2" y="5" width="4" height="70" fill="#6B5A4A"/>
+                                <rect x="94" y="5" width="4" height="70" fill="#6B5A4A"/>
+                            </svg>
+                        </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 400px;">
-                            <!-- Email -->
-                            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; background: #FFE5E5; border: 3px solid #FF85A3; border-radius: 12px; cursor: text; user-select: text;">
-                                <span style="font-size: 48px;">📧</span>
-                                <span style="font-size: 14px; text-align: center; word-break: break-all;">scottvan@126.com</span>
+                        <!-- 联系方式 -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 300px;">
+                            <!-- Email - 占两列的长方形 -->
+                            <div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; cursor: text; user-select: text; transition: background 0.2s;">
+                                <span style="font-size: 24px;">📧</span>
+                                <span style="font-size: 13px; color: #5A4A3A;">scottvan@126.com</span>
                             </div>
 
-                            <!-- GitHub -->
+                            <!-- GitHub - 正方形 -->
                             <a href="https://github.com/Andvc" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; background: #E8E8E8; border: 3px solid #6B6B6B; border-radius: 12px; transition: transform 0.2s;">
-                                    <img src="public/Andvc/github.png" alt="GitHub" style="width: 64px; height: 64px; object-fit: contain;">
-                                    <span style="font-size: 14px;">GitHub</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
+                                    <img src="public/Andvc/github.png" alt="GitHub" style="width: 40px; height: 40px; object-fit: contain;">
+                                    <span style="font-size: 12px; color: #5A4A3A;">GitHub</span>
                                 </div>
                             </a>
 
-                            <!-- Bilibili -->
+                            <!-- Bilibili - 正方形 -->
                             <a href="https://space.bilibili.com/333360446" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; background: #FBE5E5; border: 3px solid #FF85A3; border-radius: 12px; transition: transform 0.2s;">
-                                    <img src="public/Andvc/bilibili.png" alt="Bilibili" style="width: 64px; height: 64px; object-fit: contain;">
-                                    <span style="font-size: 14px;">Bilibili</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
+                                    <img src="public/Andvc/bilibili.png" alt="Bilibili" style="width: 40px; height: 40px; object-fit: contain;">
+                                    <span style="font-size: 12px; color: #5A4A3A;">Bilibili</span>
                                 </div>
                             </a>
 
-                            <!-- 小红书 -->
+                            <!-- 小红书 - 正方形 -->
                             <a href="https://www.xiaohongshu.com/user/profile/630ac576000000001200e4e7" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; background: #FFE5E5; border: 3px solid #FF6B6B; border-radius: 12px; transition: transform 0.2s;">
-                                    <img src="public/Andvc/小红书.png" alt="小红书" style="width: 64px; height: 64px; object-fit: contain;">
-                                    <span style="font-size: 14px;">小红书</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
+                                    <img src="public/Andvc/小红书.png" alt="小红书" style="width: 40px; height: 40px; object-fit: contain;">
+                                    <span style="font-size: 12px; color: #5A4A3A;">小红书</span>
                                 </div>
                             </a>
 
-                            <!-- 机核网 -->
+                            <!-- 机核网 - 正方形 -->
                             <a href="https://www.gcores.com/users/844737" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; background: #E5F5FF; border: 3px solid #4A9EFF; border-radius: 12px; transition: transform 0.2s;">
-                                    <img src="public/Andvc/机核网.webp" alt="机核网" style="width: 64px; height: 64px; object-fit: contain;">
-                                    <span style="font-size: 14px;">机核网</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
+                                    <img src="public/Andvc/机核网.webp" alt="机核网" style="width: 40px; height: 40px; object-fit: contain;">
+                                    <span style="font-size: 12px; color: #5A4A3A;">机核网</span>
                                 </div>
                             </a>
 
-                            <!-- Steam -->
+                            <!-- Steam - 正方形 -->
                             <a href="https://steamcommunity.com/profiles/76561198212645887/" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; background: #E5E5F0; border: 3px solid #6B7AFF; border-radius: 12px; transition: transform 0.2s;">
-                                    <img src="public/Andvc/steam.png" alt="Steam" style="width: 64px; height: 64px; object-fit: contain;">
-                                    <span style="font-size: 14px;">Steam</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
+                                    <img src="public/Andvc/steam.png" alt="Steam" style="width: 40px; height: 40px; object-fit: contain;">
+                                    <span style="font-size: 12px; color: #5A4A3A;">Steam</span>
                                 </div>
                             </a>
                         </div>
