@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Homepage</title>
+    <!-- 导入字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            background: transparent;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 全页面背景视频 */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.4;
+            filter: blur(2px);
+        }
+
+        /* 音乐播放器 */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid #F4A259;
+            border-radius: 50px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(244, 162, 89, 0.3);
+        }
+
+        .music-btn {
+            width: 40px;
+            height: 40px;
+            background: #F4A259;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background: #F27C5A;
+            transform: scale(1.1);
+        }
+
+        .music-info {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            font-size: 16px;
+            color: #FFF8F0;
+        }
+
+        /* 小猫场景容器 - 正常文档流 */
+        .cat-scene-section {
+            width: 100%;
+            min-height: 60vh;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            max-width: 1400px;
+            overflow: hidden;
+            max-height: 820px;
+        }
+
+        /* Canvas包装器 - 只裁剪顶部空余 */
+        .canvas-wrapper {
+            position: relative;
+            height: 820px;
+            overflow: hidden;
+        }
+
+        .canvas-wrapper canvas {
+            position: relative;
+            top: -80px;
+        }
+
+        /* 向下滚动提示 */
+        .scroll-hint {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 55px;
+            height: 32px;
+            cursor: pointer;
+            z-index: 15;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            overflow: visible;
+        }
+
+        .scroll-hint img {
+            width: 55px;
+            height: 32px;
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+
+        .scroll-hint-left {
+            left: 50px;
+            animation: floatUpDown 2s ease-in-out infinite;
+        }
+
+        .scroll-hint-right {
+            right: 50px;
+            animation: floatUpDown 2s ease-in-out infinite;
+        }
+
+        @keyframes floatUpDown {
+            0%, 100% {
+                transform: translateY(-50%);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(calc(-50% + 15px));
+                opacity: 1;
+            }
+        }
+
+        #catCanvas {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            cursor: pointer;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            /* CSS缩放：显示尺寸缩小25%，内部坐标系保持1600x1200不变 */
+            width: 1200px;
+            height: 900px;
+        }
+
+        /* 欢迎对话框 - 使用catUI素材 */
+        .welcome-dialog {
+            position: absolute;
+            left: -200px;
+            top: 30px;
+            width: 140px;
+            height: 28px;
+            transform: scale(3.2);
+            transform-origin: left top;
+            z-index: 20;
+            overflow: hidden;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog img {
+            position: absolute;
+            width: 80px;
+            height: 21px;
+            object-fit: none;
+            object-position: -227px -197px;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog span {
+            position: absolute;
+            left: 96px;
+            top: 39%;
+            transform: translateY(-50%);
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 6px;
+            color: #4A4A4A;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        /* 第二个对话框 - 提示拖动 */
+        .welcome-dialog-2 {
+            position: absolute;
+            left: 720px;
+            top: 30px;
+            width: 140px;
+            height: 28px;
+            transform: scale(3.2);
+            transform-origin: left top;
+            z-index: 20;
+            overflow: hidden;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-2 img {
+            position: absolute;
+            width: 80px;
+            height: 21px;
+            object-fit: none;
+            object-position: -307px -197px;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-2 span {
+            position: absolute;
+            left: 93px;
+            top: 38%;
+            transform: translateY(-50%);
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 5.4px;
+            color: #4A4A4A;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        /* 第三个对话框 - 提示连续点击 */
+        .welcome-dialog-3 {
+            position: absolute;
+            left: -200px;
+            top: 700px;
+            width: 140px;
+            height: 28px;
+            transform: scale(3.2);
+            transform-origin: left top;
+            z-index: 20;
+            overflow: hidden;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-3 img {
+            position: absolute;
+            width: 80px;
+            height: 21px;
+            object-fit: none;
+            object-position: -227px -229px;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-3 span {
+            position: absolute;
+            left: 95.5px;
+            top: 40%;
+            transform: translateY(-50%);
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 6.0px;
+            color: #4A4A4A;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        /* 第四个对话框 - 右下角传送提示 */
+        .welcome-dialog-4 {
+            position: absolute;
+            right: 33px;
+            bottom: 50px;
+            width: 140px;
+            height: 28px;
+            transform: scale(3.2);
+            transform-origin: right bottom;
+            z-index: 20;
+            overflow: hidden;
+            image-rendering: pixelated;
+            cursor: pointer;
+        }
+
+        .welcome-dialog-4 img {
+            position: absolute;
+            width: 80px;
+            height: 21px;
+            object-fit: none;
+            object-position: -307px -229px;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-4 span {
+            position: absolute;
+            left: 94.5px;
+            top: 40%;
+            transform: translateY(-50%);
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 5.2px;
+            color: #4A4A4A;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        /* 传送箭头 - 在对话框下方浮动 */
+        .teleport-arrow {
+            position: absolute;
+            right: 115px;
+            bottom: 67px;
+            width: 15px;
+            height: 11px;
+            transform: scale(3);
+            transform-origin: center;
+            z-index: 20;
+            cursor: pointer;
+            animation: floatArrow 2s ease-in-out infinite;
+        }
+
+        .teleport-arrow img {
+            width: 15px;
+            height: 11px;
+            object-fit: none;
+            object-position: -336px -35px;
+            image-rendering: pixelated;
+        }
+
+        @keyframes floatArrow {
+            0%, 100% {
+                transform: scale(3) translateY(0);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(3) translateY(10px);
+                opacity: 1;
+            }
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            background: transparent;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 80px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section h2 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-content p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* 不同section的背景色 - 删除以显示视频背景 */
+        .section:nth-child(odd) {
+            background: transparent;
+        }
+
+        .section:nth-child(even) {
+            background: transparent;
+        }
+
+        /* ========== 像素风格组件 ========== */
+
+        /* 像素风格标题 */
+        .pixel-title {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 42px;
+            color: #FFF8F0;
+            text-align: center;
+            margin-bottom: 60px;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+            letter-spacing: 3px;
+        }
+
+        /* 工作室场景容器 */
+        .studio-scene {
+            max-width: 1400px;
+            width: 100%;
+            min-height: 600px;
+            background: #E8DCC8;
+            border-radius: 20px;
+            padding: 60px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        /* 工作室网格布局 */
+        .studio-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* 左侧装饰区 */
+        .studio-left {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* 装饰物品 */
+        .decoration-item {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .shelf {
+            width: 100%;
+            height: auto;
+        }
+
+        .plant {
+            width: 60px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* 中央信息卡片区 */
+        .studio-center {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* 个人信息卡片（使用对话框样式） */
+        .profile-card {
+            background: #FFF8F0;
+            border: 8px solid #D4A574;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 6px 0 #B08968, 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 4px solid #8B6F47;
+            border-radius: 22px;
+            pointer-events: none;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #D4A574;
+            background: #E8C4C4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 32px;
+            color: #4A4A4A;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .profile-title {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            font-size: 20px;
+            color: #8B6F47;
+        }
+
+        .profile-description {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #4A4A4A;
+            margin-top: 15px;
+        }
+
+        /* 技能标签 */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            font-size: 16px;
+            padding: 5px 12px;
+            background: #E8C4C4;
+            border: 3px solid #D4A574;
+            border-radius: 8px;
+            color: #4A4A4A;
+            image-rendering: pixelated;
+        }
+
+        /* 技能展示卡片 */
+        .skills-card {
+            background: #C9E4DE;
+            border: 8px solid #91C5B8;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 6px 0 #6B9B8E, 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .skills-card::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 4px solid #5A8A7D;
+            border-radius: 22px;
+            pointer-events: none;
+        }
+
+        .skills-title {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 24px;
+            color: #2A4A42;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        /* 技能进度条 */
+        .skill-item {
+            margin-bottom: 12px;
+        }
+
+        .skill-name {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            font-size: 18px;
+            color: #2A4A42;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .skill-bar-container {
+            width: 100%;
+            height: 30px;
+            background: #E8F4F1;
+            border: 4px solid #91C5B8;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            image-rendering: pixelated;
+        }
+
+        .skill-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #F4A259 0%, #F27C5A 100%);
+            border-right: 4px solid #D96B48;
+            transition: width 1s ease-out;
+            position: relative;
+        }
+
+        .skill-bar::after {
+            content: '🐾';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        /* 右侧装饰区 */
+        .studio-right {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* 装饰框架 */
+        .frame-decoration {
+            width: 100%;
+            padding: 20px;
+            background: #FFF8F0;
+            border: 6px solid #D4A574;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 0 #B08968;
+        }
+
+        .frame-decoration img {
+            width: 100%;
+            height: auto;
+            image-rendering: pixelated;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1200px) {
+            .studio-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .studio-left, .studio-right {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景视频 -->
+    <video id="bg-video" autoplay loop muted playsinline preload="auto">
+        <source src="./public/Andvc/MuseDash.mp4" type="video/mp4">
+        您的浏览器不支持视频播放。
+    </video>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+        <button class="music-btn" id="musicToggle">▶️</button>
+        <div class="music-info">Background Music</div>
+    </div>
+    <audio id="bg-music" loop>
+        <source src="public/Andvc/Music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 小猫场景 - 第一屏 -->
+    <div class="cat-scene-section">
+        <div class="container">
+            <div class="canvas-wrapper">
+                <canvas id="catCanvas" width="1600" height="1200"></canvas>
+                <!-- 欢迎对话框 -->
+                <div class="welcome-dialog">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
+                    <span>欢迎来到咪小屋</span>
+                </div>
+                <!-- 第二个对话框 - 提示拖动 -->
+                <div class="welcome-dialog-2">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
+                    <span>拖动它会发生什么呢</span>
+                </div>
+                <!-- 第三个对话框 - 提示连续点击 -->
+                <div class="welcome-dialog-3">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
+                    <span>它讨厌被一直戳</span>
+                </div>
+                <!-- 第四个对话框 - 右下角传送提示 -->
+                <div class="welcome-dialog-4" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
+                    <span>关于我？点击传送！</span>
+                </div>
+                <!-- 传送箭头 -->
+                <div class="teleport-arrow" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="arrow">
+                </div>
+            </div>
+        </div>
+
+        <!-- 向下滚动提示 - 使用catUI素材 -->
+        <div class="scroll-hint scroll-hint-left" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
+            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="object-fit: none; object-position: -398px -772px;">
+        </div>
+        <div class="scroll-hint scroll-hint-right" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
+            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="scroll down" style="object-fit: none; object-position: -398px -772px;">
+        </div>
+    </div>
+
+    <!-- 可滚动的主内容区域 -->
+    <div class="main-content">
+        <section class="section" id="about">
+            <h1 class="pixel-title">< ABOUT ME ></h1>
+
+            <div class="studio-scene" id="studio-scene">
+                <div class="studio-grid">
+                    <!-- 左侧装饰区 -->
+                    <div class="studio-left">
+                        <!-- 梯子装饰 -->
+                        <div class="decoration-item" style="margin-bottom: 10px; transform: scale(0.9);">
+                            <svg class="shelf" viewBox="0 0 100 80" style="filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));">
+                                <rect x="5" y="10" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="5" y="35" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="5" y="60" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="2" y="5" width="4" height="70" fill="#6B5A4A"/>
+                                <rect x="94" y="5" width="4" height="70" fill="#6B5A4A"/>
+                            </svg>
+                        </div>
+
+                        <!-- 最喜欢的作品标题 -->
+                        <div class="skills-title" style="margin-bottom: 8px; color: #8B6F47; font-size: 22px; font-weight: bold;">最喜欢的作品</div>
+
+                        <!-- 游戏图标网格 - 居中显示 -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 200px; margin: 0 auto;">
+                            <!-- Elden Ring -->
+                            <div class="game-icon" onclick="changeAboutBackground('public/Andvc/eldenring2.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/eldenring1.jpg" alt="Elden Ring" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            <!-- Enter the Gungeon -->
+                            <div class="game-icon" onclick="changeAboutBackground('public/Andvc/enterthegungen2.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/enterthegungen1.jpg" alt="Enter the Gungeon" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            <!-- Slay the Spire -->
+                            <div class="game-icon" onclick="changeAboutBackground('public/Andvc/slaythespire2.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/slaythespire1 .jpg" alt="Slay the Spire" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            <!-- Street Fighter 6 -->
+                            <div class="game-icon" onclick="changeAboutBackground('public/Andvc/streetfighter62.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/streetfighter61.jpg" alt="Street Fighter 6" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            <!-- Terraria -->
+                            <div class="game-icon" onclick="changeAboutBackground('public/Andvc/terraria2.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/terraria1.jpg" alt="Terraria" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            <!-- League of Legends -->
+                            <div class="game-icon" onclick="changeAboutBackground('public/Andvc/lol2.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/lol1.jpg" alt="League of Legends" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            <!-- Phigros -->
+                            <div class="game-icon" onclick="changeAboutBackground('public/Andvc/phigros2.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/phigros1.jpg" alt="Phigros" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+
+                            <!-- 玄鉴仙族 - 无背景图 -->
+                            <div class="game-icon" onclick="changeAboutBackground('')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/玄鉴仙族.jpg" alt="玄鉴仙族" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 中央内容区 -->
+                    <div class="studio-center">
+                        <!-- 个人信息卡片 -->
+                        <div class="profile-card">
+                            <div class="profile-header">
+                                <div class="profile-avatar">
+                                    <img src="public/Andvc/头像.jpg" alt="Andvc">
+                                </div>
+                                <div>
+                                    <div class="profile-name">Andvc</div>
+                                    <div class="profile-title">ZJU | 应用数学 | ITP</div>
+                                </div>
+                            </div>
+                            <div class="profile-description">
+                                21岁 | 男 | 游戏、思考、创造<br>
+                                现在在做：游戏行研 | 打 Game Jam<br>
+                                最近在玩：Hades 2 | 英雄联盟<br><br>
+                                「人生没有巅峰，只有攀爬，也许在那极高无人之处，有永恒存在。」
+                            </div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">游戏人</span>
+                                <span class="skill-tag">唯心唯物者</span>
+                                <span class="skill-tag">数字幻想</span>
+                                <span class="skill-tag">创造</span>
+                            </div>
+                        </div>
+
+                        <!-- 技能展示卡片 -->
+                        <div class="skills-card">
+                            <div class="skills-title">SKILL LEVEL</div>
+
+                            <div class="skill-item">
+                                <div class="skill-name">
+                                    <span>游戏设计</span>
+                                    <span>88%</span>
+                                </div>
+                                <div class="skill-bar-container">
+                                    <div class="skill-bar" style="width: 88%"></div>
+                                </div>
+                            </div>
+
+                            <div class="skill-item">
+                                <div class="skill-name">
+                                    <span>数学建模</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="skill-bar-container">
+                                    <div class="skill-bar" style="width: 85%"></div>
+                                </div>
+                            </div>
+
+                            <div class="skill-item">
+                                <div class="skill-name">
+                                    <span>coding</span>
+                                    <span>82%</span>
+                                </div>
+                                <div class="skill-bar-container">
+                                    <div class="skill-bar" style="width: 82%"></div>
+                                </div>
+                            </div>
+
+                            <div class="skill-item">
+                                <div class="skill-name">
+                                    <span>创意思维</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="skill-bar-container">
+                                    <div class="skill-bar" style="width: 90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧装饰和联系方式 -->
+                    <div class="studio-right">
+                        <!-- 梯子装饰 -->
+                        <div class="decoration-item" style="margin-bottom: 10px; transform: scale(0.9);">
+                            <svg class="shelf" viewBox="0 0 100 80" style="filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));">
+                                <rect x="5" y="10" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="5" y="35" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="5" y="60" width="90" height="8" fill="#8B6F47" stroke="#5A4A3A" stroke-width="2"/>
+                                <rect x="2" y="5" width="4" height="70" fill="#6B5A4A"/>
+                                <rect x="94" y="5" width="4" height="70" fill="#6B5A4A"/>
+                            </svg>
+                        </div>
+
+                        <!-- 联系方式标题 -->
+                        <div class="skills-title" style="margin-bottom: 8px; color: #8B6F47; font-size: 22px; font-weight: bold;">联系方式</div>
+
+                        <!-- 联系方式 - 居中显示，无外框 -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 200px; margin: 0 auto;">
+                            <!-- Email - 占两列 -->
+                            <div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: text; user-select: text;">
+                                <span style="font-size: 28px;">📧</span>
+                                <span style="font-size: 15px; color: #5A4A3A;">scottvan@126.com</span>
+                            </div>
+
+                            <!-- GitHub -->
+                            <a href="https://github.com/Andvc" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/github.png" alt="GitHub" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                                </div>
+                            </a>
+
+                            <!-- Bilibili -->
+                            <a href="https://space.bilibili.com/333360446" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/bilibili.png" alt="Bilibili" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                                </div>
+                            </a>
+
+                            <!-- 小红书 -->
+                            <a href="https://www.xiaohongshu.com/user/profile/630ac576000000001200e4e7" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/小红书.png" alt="小红书" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                                </div>
+                            </a>
+
+                            <!-- 机核网 -->
+                            <a href="https://www.gcores.com/users/844737" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/机核网.webp" alt="机核网" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                                </div>
+                            </a>
+
+                            <!-- Steam -->
+                            <a href="https://steamcommunity.com/profiles/76561198212645887/" target="_blank" style="text-decoration: none; color: inherit;">
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/steam.png" alt="Steam" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="projects">
+            <h2>我的博客</h2>
+            <div class="section-content">
+                <p style="text-align: center; font-size: 24px; color: #8B6F47; margin-top: 40px;">
+                    🚧 施工中 🚧
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script src="catAnimation.js"></script>
+    <script>
+        // 强制加载背景视频
+        const bgVideo = document.getElementById('bg-video');
+
+        // 监听视频错误
+        bgVideo.addEventListener('error', (e) => {
+            console.error('视频加载失败:', e);
+            console.error('视频源:', bgVideo.querySelector('source').src);
+        });
+
+        // 监听视频加载成功
+        bgVideo.addEventListener('loadeddata', () => {
+            console.log('视频加载成功');
+            bgVideo.play().catch(err => {
+                console.error('视频播放失败:', err);
+            });
+        });
+
+        // 页面加载完成后强制加载视频
+        window.addEventListener('load', () => {
+            bgVideo.load();
+            bgVideo.play().catch(err => {
+                console.log('自动播放被阻止，等待用户交互');
+            });
+        });
+
+        // 音乐播放器控制
+        const musicToggle = document.getElementById('musicToggle');
+        const bgMusic = document.getElementById('bg-music');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicToggle.textContent = '▶️';
+            } else {
+                bgMusic.play();
+                musicToggle.textContent = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // 进度条动画
+        window.addEventListener('load', () => {
+            const skillBars = document.querySelectorAll('.skill-bar');
+            setTimeout(() => {
+                skillBars.forEach(bar => {
+                    bar.style.width = bar.style.width;
+                });
+            }, 500);
+        });
+
+        // 切换 About Me 区域背景
+        function changeAboutBackground(imagePath) {
+            const studioScene = document.getElementById('studio-scene');
+            if (imagePath) {
+                studioScene.style.backgroundImage = `url('${imagePath}')`;
+                studioScene.style.backgroundSize = 'auto 100%';  // 高度100%，宽度自适应
+                studioScene.style.backgroundPosition = 'center center';  // 宽度超出时裁剪左右，保持中间
+                studioScene.style.backgroundRepeat = 'no-repeat';
+            } else {
+                // 恢复默认背景
+                studioScene.style.backgroundImage = '';
+            }
+        }
+
+        // 游戏图标悬停效果
+        const gameIcons = document.querySelectorAll('.game-icon');
+        gameIcons.forEach(icon => {
+            icon.addEventListener('mouseenter', () => {
+                icon.style.transform = 'scale(1.05)';
+            });
+            icon.addEventListener('mouseleave', () => {
+                icon.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
