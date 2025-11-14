@@ -990,8 +990,8 @@
             const studioScene = document.getElementById('studio-scene');
             if (imagePath) {
                 studioScene.style.backgroundImage = `url('${imagePath}')`;
-                studioScene.style.backgroundSize = 'cover';  // 保证完全覆盖，不留白
-                studioScene.style.backgroundPosition = 'center center';  // 裁剪时保持中心区域
+                studioScene.style.backgroundSize = 'auto 100%';  // 高度100%，宽度自适应
+                studioScene.style.backgroundPosition = 'center center';  // 宽度超出时裁剪左右，保持中间
                 studioScene.style.backgroundRepeat = 'no-repeat';
             } else {
                 // 恢复默认背景
