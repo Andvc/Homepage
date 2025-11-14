@@ -201,13 +201,27 @@
         }
 
         .loading-text {
-            position: relative;
+            position: absolute;
+            top: 30%;
+            right: 25%;
             font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
-            font-size: 20px;
+            font-size: 28px;
             color: #4A4A4A;
             z-index: 1;
             letter-spacing: 2px;
-            margin-top: -10px;
+        }
+
+        /* OK按钮 */
+        .loading-ok-btn {
+            position: absolute;
+            bottom: 25%;
+            right: 25%;
+            width: 60px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
         }
 
         #catCanvas {
@@ -721,6 +735,7 @@
         <div class="loading-dialog">
             <img src="public/CatUIPaid/CatUIPaid/cropped-catUI.png" alt="loading dialog" class="loading-dialog-bg">
             <div class="loading-text" id="loadingText"></div>
+            <button class="loading-ok-btn" id="loadingOkBtn" onclick="closeLoadingDialog()"></button>
         </div>
     </div>
 
@@ -1002,6 +1017,7 @@
         const fullText = '加载中。。。';
         let currentIndex = 0;
         let typingInterval = null;
+        let autoCloseTimeout = null;
 
         // 打字机效果函数
         function typeText() {
@@ -1017,18 +1033,24 @@
             }
         }
 
-        // 开始打字机动画（每200ms显示一个字符）
-        typingInterval = setInterval(typeText, 200);
-
-        // 3秒后隐藏加载对话框
-        setTimeout(() => {
+        // 关闭加载对话框函数
+        function closeLoadingDialog() {
             clearInterval(typingInterval);
+            clearTimeout(autoCloseTimeout);
             loadingOverlay.classList.add('fade-out');
             // 再等0.5秒（淡出动画时间）后完全移除
             setTimeout(() => {
                 loadingOverlay.style.display = 'none';
             }, 500);
-        }, 3000);
+        }
+
+        // 开始打字机动画（每200ms显示一个字符）
+        typingInterval = setInterval(typeText, 200);
+
+        // 5秒后自动隐藏加载对话框
+        autoCloseTimeout = setTimeout(() => {
+            closeLoadingDialog();
+        }, 5000);
 
         // 强制加载背景视频
         const bgVideo = document.getElementById('bg-video');
