@@ -239,6 +239,41 @@
             z-index: 1;
         }
 
+        /* 第三个对话框 - 提示连续点击 */
+        .welcome-dialog-3 {
+            position: absolute;
+            left: 720px;
+            top: 120px;
+            width: 140px;
+            height: 28px;
+            transform: scale(3.2);
+            transform-origin: left top;
+            z-index: 20;
+            overflow: hidden;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-3 img {
+            position: absolute;
+            width: 80px;
+            height: 21px;
+            object-fit: none;
+            object-position: -307px -197px;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-3 span {
+            position: absolute;
+            left: 93px;
+            top: 38%;
+            transform: translateY(-50%);
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 5.4px;
+            color: #4A4A4A;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
         /* 主内容区域 */
         .main-content {
             background: transparent;
@@ -586,6 +621,11 @@
                 <div class="welcome-dialog-2">
                     <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
                     <span>拖动它会发生什么呢</span>
+                </div>
+                <!-- 第三个对话框 - 提示连续点击 -->
+                <div class="welcome-dialog-3">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
+                    <span>它很讨厌被连续戳击</span>
                 </div>
             </div>
         </div>
