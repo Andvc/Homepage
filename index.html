@@ -180,9 +180,9 @@
         /* 加载对话框 */
         .loading-dialog {
             position: relative;
-            width: 480px;
-            height: 160px;
-            transform: scale(2);
+            width: 400px;
+            height: 200px;
+            transform: scale(2.5);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -194,23 +194,20 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 160px;
-            height: 41px;
-            object-fit: none;
-            object-position: -227px -261px;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
             image-rendering: pixelated;
-            transform: scale(3);
-            transform-origin: left top;
         }
 
         .loading-text {
             position: relative;
             font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
-            font-size: 18px;
+            font-size: 20px;
             color: #4A4A4A;
             z-index: 1;
             letter-spacing: 2px;
-            margin-top: 10px;
+            margin-top: -10px;
         }
 
         #catCanvas {
@@ -722,7 +719,7 @@
     <!-- 加载对话框 -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-dialog">
-            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="loading dialog" class="loading-dialog-bg">
+            <img src="public/CatUIPaid/CatUIPaid/cropped-catUI.png" alt="loading dialog" class="loading-dialog-bg">
             <div class="loading-text" id="loadingText"></div>
         </div>
     </div>
