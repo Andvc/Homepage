@@ -274,6 +274,75 @@
             z-index: 1;
         }
 
+        /* 第四个对话框 - 右下角传送提示 */
+        .welcome-dialog-4 {
+            position: absolute;
+            right: -200px;
+            bottom: 100px;
+            width: 140px;
+            height: 28px;
+            transform: scale(3.2);
+            transform-origin: right bottom;
+            z-index: 20;
+            overflow: hidden;
+            image-rendering: pixelated;
+            cursor: pointer;
+        }
+
+        .welcome-dialog-4 img {
+            position: absolute;
+            width: 80px;
+            height: 21px;
+            object-fit: none;
+            object-position: -227px -229px;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-4 span {
+            position: absolute;
+            left: 95.5px;
+            top: 40%;
+            transform: translateY(-50%);
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 5.2px;
+            color: #4A4A4A;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        /* 传送箭头 - 在对话框下方浮动 */
+        .teleport-arrow {
+            position: absolute;
+            right: 45px;
+            bottom: 60px;
+            width: 15px;
+            height: 11px;
+            transform: scale(3);
+            transform-origin: center;
+            z-index: 20;
+            cursor: pointer;
+            animation: floatArrow 2s ease-in-out infinite;
+        }
+
+        .teleport-arrow img {
+            width: 15px;
+            height: 11px;
+            object-fit: none;
+            object-position: -336px -35px;
+            image-rendering: pixelated;
+        }
+
+        @keyframes floatArrow {
+            0%, 100% {
+                transform: scale(3) translateY(0);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(3) translateY(10px);
+                opacity: 1;
+            }
+        }
+
         /* 主内容区域 */
         .main-content {
             background: transparent;
@@ -626,6 +695,15 @@
                 <div class="welcome-dialog-3">
                     <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
                     <span>它讨厌被一直戳</span>
+                </div>
+                <!-- 第四个对话框 - 右下角传送提示 -->
+                <div class="welcome-dialog-4" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
+                    <span>关于我？点击传送！</span>
+                </div>
+                <!-- 传送箭头 -->
+                <div class="teleport-arrow" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="arrow">
                 </div>
             </div>
         </div>
