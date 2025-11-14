@@ -156,6 +156,63 @@
             }
         }
 
+        /* 加载对话框覆盖层 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 加载对话框 */
+        .loading-dialog {
+            position: relative;
+            width: 480px;
+            height: 160px;
+            transform: scale(2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            image-rendering: pixelated;
+        }
+
+        .loading-dialog-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 160px;
+            height: 41px;
+            object-fit: none;
+            object-position: -227px -261px;
+            image-rendering: pixelated;
+            transform: scale(3);
+            transform-origin: left top;
+        }
+
+        .loading-text {
+            position: relative;
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            font-size: 18px;
+            color: #4A4A4A;
+            z-index: 1;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
         #catCanvas {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
@@ -662,6 +719,14 @@
     </style>
 </head>
 <body>
+    <!-- 加载对话框 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-dialog">
+            <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="loading dialog" class="loading-dialog-bg">
+            <div class="loading-text" id="loadingText"></div>
+        </div>
+    </div>
+
     <!-- 背景视频 -->
     <video id="bg-video" autoplay loop muted playsinline preload="auto">
         <source src="./public/Andvc/MuseDash.mp4" type="video/mp4">
@@ -934,6 +999,40 @@
 
     <script src="catAnimation.js"></script>
     <script>
+        // 加载对话框动画
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
+        const fullText = '加载中。。。';
+        let currentIndex = 0;
+        let typingInterval = null;
+
+        // 打字机效果函数
+        function typeText() {
+            if (currentIndex < fullText.length) {
+                loadingText.textContent = fullText.substring(0, currentIndex + 1);
+                currentIndex++;
+            } else {
+                // 完整显示后等待500ms，然后重新开始
+                setTimeout(() => {
+                    currentIndex = 0;
+                    loadingText.textContent = '';
+                }, 500);
+            }
+        }
+
+        // 开始打字机动画（每200ms显示一个字符）
+        typingInterval = setInterval(typeText, 200);
+
+        // 3秒后隐藏加载对话框
+        setTimeout(() => {
+            clearInterval(typingInterval);
+            loadingOverlay.classList.add('fade-out');
+            // 再等0.5秒（淡出动画时间）后完全移除
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+            }, 500);
+        }, 3000);
+
         // 强制加载背景视频
         const bgVideo = document.getElementById('bg-video');
 
