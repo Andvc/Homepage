@@ -169,6 +169,32 @@
             height: 900px;
         }
 
+        /* 欢迎对话框 - 使用catUI素材 */
+        .welcome-dialog {
+            position: absolute;
+            left: 40px;
+            top: 30px;
+            width: 284px;
+            height: 76px;
+            background-image: url('public/CatUIPaid/CatUIPaid/catUI.png');
+            background-position: -227px -197px;
+            background-repeat: no-repeat;
+            image-rendering: pixelated;
+            transform: scale(4);
+            transform-origin: left top;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            padding-left: 80px;
+        }
+
+        .welcome-dialog span {
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 5px;
+            color: #4A4A4A;
+            white-space: nowrap;
+        }
+
         /* 主内容区域 */
         .main-content {
             background: transparent;
@@ -507,6 +533,10 @@
         <div class="container">
             <div class="canvas-wrapper">
                 <canvas id="catCanvas" width="1600" height="1200"></canvas>
+                <!-- 欢迎对话框 -->
+                <div class="welcome-dialog">
+                    <span>欢迎来到咪小屋</span>
+                </div>
             </div>
         </div>
 
