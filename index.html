@@ -741,8 +741,8 @@
                         <!-- 游戏收藏标题 -->
                         <div class="skills-title" style="margin-bottom: 12px; color: #8B6F47; font-size: 14px;">游戏收藏</div>
 
-                        <!-- 游戏图标网格 - 缩小尺寸 -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 200px;">
+                        <!-- 游戏图标网格 - 居中显示 -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 200px; margin: 0 auto;">
                             <!-- Elden Ring -->
                             <div class="game-icon" onclick="changeAboutBackground('public/Andvc/eldenring2.jpg')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
                                 <img src="public/Andvc/eldenring1.jpg" alt="Elden Ring" style="width: 100%; height: 100%; object-fit: cover;">
@@ -872,53 +872,48 @@
                         </div>
 
                         <!-- 联系方式标题 -->
-                        <div class="skills-title" style="margin-bottom: 15px; color: #8B6F47;">联系方式</div>
+                        <div class="skills-title" style="margin-bottom: 12px; color: #8B6F47; font-size: 14px;">联系方式</div>
 
-                        <!-- 联系方式 -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 300px;">
-                            <!-- Email - 占两列的长方形 -->
-                            <div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; cursor: text; user-select: text; transition: background 0.2s;">
-                                <span style="font-size: 48px;">📧</span>
-                                <span style="font-size: 13px; color: #5A4A3A;">scottvan@126.com</span>
+                        <!-- 联系方式 - 居中显示，无外框 -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 200px; margin: 0 auto;">
+                            <!-- Email - 占两列 -->
+                            <div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: text; user-select: text;">
+                                <span style="font-size: 24px;">📧</span>
+                                <span style="font-size: 11px; color: #5A4A3A;">scottvan@126.com</span>
                             </div>
 
-                            <!-- GitHub - 正方形 -->
+                            <!-- GitHub -->
                             <a href="https://github.com/Andvc" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
-                                    <img src="public/Andvc/github.png" alt="GitHub" style="width: 80px; height: 80px; object-fit: contain;">
-                                    <span style="font-size: 12px; color: #5A4A3A;">GitHub</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/github.png" alt="GitHub" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
                                 </div>
                             </a>
 
-                            <!-- Bilibili - 正方形 -->
+                            <!-- Bilibili -->
                             <a href="https://space.bilibili.com/333360446" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
-                                    <img src="public/Andvc/bilibili.png" alt="Bilibili" style="width: 80px; height: 80px; object-fit: contain;">
-                                    <span style="font-size: 12px; color: #5A4A3A;">Bilibili</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/bilibili.png" alt="Bilibili" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
                                 </div>
                             </a>
 
-                            <!-- 小红书 - 正方形 -->
+                            <!-- 小红书 -->
                             <a href="https://www.xiaohongshu.com/user/profile/630ac576000000001200e4e7" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
-                                    <img src="public/Andvc/小红书.png" alt="小红书" style="width: 80px; height: 80px; object-fit: contain;">
-                                    <span style="font-size: 12px; color: #5A4A3A;">小红书</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/小红书.png" alt="小红书" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
                                 </div>
                             </a>
 
-                            <!-- 机核网 - 正方形 -->
+                            <!-- 机核网 -->
                             <a href="https://www.gcores.com/users/844737" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
-                                    <img src="public/Andvc/机核网.webp" alt="机核网" style="width: 80px; height: 80px; object-fit: contain;">
-                                    <span style="font-size: 12px; color: #5A4A3A;">机核网</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/机核网.webp" alt="机核网" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
                                 </div>
                             </a>
 
-                            <!-- Steam - 正方形 -->
+                            <!-- Steam -->
                             <a href="https://steamcommunity.com/profiles/76561198212645887/" target="_blank" style="text-decoration: none; color: inherit;">
-                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #FAF9F6; border: 2px solid #8B6F47; transition: background 0.2s;">
-                                    <img src="public/Andvc/steam.png" alt="Steam" style="width: 80px; height: 80px; object-fit: contain;">
-                                    <span style="font-size: 12px; color: #5A4A3A;">Steam</span>
+                                <div style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: transform 0.2s;">
+                                    <img src="public/Andvc/steam.png" alt="Steam" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
                                 </div>
                             </a>
                         </div>
