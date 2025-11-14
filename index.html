@@ -204,6 +204,41 @@
             z-index: 1;
         }
 
+        /* 第二个对话框 - 提示拖动 */
+        .welcome-dialog-2 {
+            position: absolute;
+            left: -200px;
+            top: 120px;
+            width: 140px;
+            height: 28px;
+            transform: scale(3.2);
+            transform-origin: left top;
+            z-index: 20;
+            overflow: hidden;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-2 img {
+            position: absolute;
+            width: 80px;
+            height: 21px;
+            object-fit: none;
+            object-position: -227px -197px;
+            image-rendering: pixelated;
+        }
+
+        .welcome-dialog-2 span {
+            position: absolute;
+            left: 96px;
+            top: 40%;
+            transform: translateY(-50%);
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
+            font-size: 6px;
+            color: #4A4A4A;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
         /* 主内容区域 */
         .main-content {
             background: transparent;
@@ -546,6 +581,11 @@
                 <div class="welcome-dialog">
                     <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
                     <span>欢迎来到咪小屋</span>
+                </div>
+                <!-- 第二个对话框 - 提示拖动 -->
+                <div class="welcome-dialog-2">
+                    <img src="public/CatUIPaid/CatUIPaid/catUI.png" alt="dialog">
+                    <span>拖动它会发生什么呢？</span>
                 </div>
             </div>
         </div>
