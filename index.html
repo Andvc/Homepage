@@ -203,7 +203,7 @@
         .loading-text {
             position: absolute;
             top: 30%;
-            left: 52%;
+            left: 48%;
             font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
             font-size: 28px;
             color: #4A4A4A;
@@ -1018,17 +1018,21 @@
         let currentIndex = 0;
         let typingInterval = null;
         let autoCloseTimeout = null;
+        let isWaiting = false;
 
         // 打字机效果函数
         function typeText() {
             if (currentIndex < fullText.length) {
                 loadingText.textContent = fullText.substring(0, currentIndex + 1);
                 currentIndex++;
-            } else {
+                isWaiting = false;
+            } else if (!isWaiting) {
                 // 完整显示后等待500ms，然后重新开始
+                isWaiting = true;
                 setTimeout(() => {
                     currentIndex = 0;
                     loadingText.textContent = '';
+                    isWaiting = false;
                 }, 500);
             }
         }
