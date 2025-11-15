@@ -39,7 +39,7 @@
         /* 音乐播放器 */
         .music-player {
             position: fixed;
-            bottom: 30px;
+            top: 30px;
             right: 30px;
             z-index: 1000;
             background: rgba(0, 0, 0, 0.7);
@@ -200,12 +200,23 @@
             image-rendering: pixelated;
         }
 
+        .loading-welcome {
+            position: absolute;
+            top: 25%;
+            right: 15%;
+            font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+            font-size: 22px;
+            color: #4A4A4A;
+            z-index: 1;
+            letter-spacing: 2px;
+        }
+
         .loading-text {
             position: absolute;
-            top: 30%;
-            left: 48%;
+            bottom: 30%;
+            left: 15%;
             font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
-            font-size: 28px;
+            font-size: 22px;
             color: #4A4A4A;
             z-index: 1;
             letter-spacing: 2px;
@@ -734,6 +745,7 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-dialog">
             <img src="public/CatUIPaid/CatUIPaid/cropped-catUI.png" alt="loading dialog" class="loading-dialog-bg">
+            <div class="loading-welcome">欢迎来到咪小屋</div>
             <div class="loading-text" id="loadingText"></div>
             <button class="loading-ok-btn" id="loadingOkBtn" onclick="closeLoadingDialog()"></button>
         </div>
