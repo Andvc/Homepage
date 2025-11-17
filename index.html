@@ -867,9 +867,9 @@
                                 <img src="public/Andvc/phigros1.jpg" alt="Phigros" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
 
-                            <!-- 玄鉴仙族 - 无背景图 -->
-                            <div class="game-icon" onclick="changeAboutBackground('')" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
-                                <img src="public/Andvc/玄鉴仙族.jpg" alt="玄鉴仙族" style="width: 100%; height: 100%; object-fit: cover;">
+                            <!-- It Takes Two -->
+                            <div class="game-icon" onclick="activateItTakesTwo()" style="aspect-ratio: 1; overflow: hidden; border: 2px solid #8B6F47; cursor: pointer; transition: transform 0.2s;">
+                                <img src="public/Andvc/ittakestwo1.jpg" alt="It Takes Two" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                         </div>
                     </div>
@@ -1005,6 +1005,11 @@
                                     <img src="public/Andvc/steam.png" alt="Steam" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </a>
+
+                            <!-- Scarlett - 彩蛋 -->
+                            <div id="scarlett-easter-egg" style="aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid #8B6F47; overflow: hidden; cursor: pointer; transition: all 0.5s ease; opacity: 0; transform: scale(0.5); pointer-events: none;">
+                                <img src="public/Andvc/scarlett.jpg" alt="Scarlett" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1131,6 +1136,18 @@
                 // 恢复默认背景
                 studioScene.style.backgroundImage = '';
             }
+        }
+
+        // It Takes Two 彩蛋：切换背景并显示 Scarlett 标签
+        function activateItTakesTwo() {
+            // 切换背景为 ittakestwo2
+            changeAboutBackground('public/Andvc/ittakestwo2.jpg');
+
+            // 显示 Scarlett 标签（淡入+缩放动画）
+            const scarlettTag = document.getElementById('scarlett-easter-egg');
+            scarlettTag.style.opacity = '1';
+            scarlettTag.style.transform = 'scale(1)';
+            scarlettTag.style.pointerEvents = 'auto';
         }
 
         // 游戏图标悬停效果

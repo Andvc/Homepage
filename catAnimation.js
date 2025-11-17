@@ -716,11 +716,8 @@ window.addEventListener('load', () => {
             Math.abs(x - mouseDownPos.x) < 5 &&
             Math.abs(y - mouseDownPos.y) < 5) {
 
-            // 优先检查热区点击
-            const hotspotClicked = catAnimation.checkHotspotClick(x, y);
-
-            // 如果没有点击热区，检查是否点击了猫咪
-            if (!hotspotClicked && catAnimation.isPointInCat(x, y)) {
+            // 只检查是否点击了猫咪（已禁用直接点击物品触发动作）
+            if (catAnimation.isPointInCat(x, y)) {
                 catAnimation.handleClick();
             }
         }
