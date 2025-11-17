@@ -1136,6 +1136,12 @@
                 // 恢复默认背景
                 studioScene.style.backgroundImage = '';
             }
+
+            // 隐藏 Scarlett 标签（只有 It Takes Two 才显示）
+            const scarlettTag = document.getElementById('scarlett-easter-egg');
+            scarlettTag.style.opacity = '0';
+            scarlettTag.style.transform = 'scale(0.5)';
+            scarlettTag.style.pointerEvents = 'none';
         }
 
         // It Takes Two 彩蛋：切换背景并显示 Scarlett 标签
